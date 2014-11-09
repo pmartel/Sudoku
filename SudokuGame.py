@@ -24,7 +24,8 @@ class Cell:
         self.val.set(' ')
         self.OrigVal = ' '
         self.but = Button(tk, bg='white', command = self.pressed,\
-                          padx=10,pady=10,textvariable=self.val)
+                          relief='groove',padx=10,pady=10,\
+                          textvariable=self.val)
         self.but.grid(row=r+1, column=c+1)
 
     def reset(self):
