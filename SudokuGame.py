@@ -20,7 +20,8 @@ class Cell:
         else:
             self.base = 10
         # set up value and button
-        self.val = ' '
+        self.val = StringVar()
+        self.val.set(' ')
         self.OrigVal = ' '
         self.but = Button(tk, bg='white', command = self.pressed,\
                           padx=10,pady=10,textvariable=self.val)
@@ -33,12 +34,12 @@ class Cell:
         return self.val
 
     def setv(self,v):  # note: just set() overloads the builtin class set
-        if self.val == ' ':
-            self.val = str(v)
-        else:
-            # some warning if you try to load over a non-blank?
-            pass
-
+##        if self.val == ' ':
+##            self.val.set(str(v))
+##        else:
+##            # some warning if you try to load over a non-blank?
+##            pass
+        self.val.set(str(v))
         
     def pressed(self):
         v = input('? ')
@@ -63,7 +64,7 @@ class SudokuGame(Frame):
         super(SudokuGame,self).__init__(tk)
 
         # set up the cells
-        lab1 = Label(tk,text='  ')
+        lab1 = Label(tk,text='  ')# this pushes the grid away from top-left
         lab1.grid(row=0,column=0)
         self.n = n
         self.nSq = n * n
