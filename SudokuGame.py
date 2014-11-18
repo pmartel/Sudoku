@@ -53,6 +53,7 @@ class Cell:
     
 class SudokuGame(Frame):
     cell=[]
+    digits = {}
     def __init__(self, tk, n=3):
         """ tk is the tkinter object that will display the board.
             n is a number that specifies the board size n^2 x n^2
@@ -80,10 +81,37 @@ class SudokuGame(Frame):
             self.cell.append(Cell(r,c,b,tk,self.nSq))
         pass
 
-    def load(self, fileName):
+    def load(self, fileName = []):
+        if fileName == []:
+            print('empty')
+        #open the file and read the board
+        try :
+            f = open(fileName,'r')
+        except FileNotFoundError:
+            print('Error opening file',fileName)
+            return      
+        b=f.readlines()
+        f.close()
+        # check the number of rows is ok
+        n2 = len(b)
+        if n2 == 4:
+            self.digits = {'1','2','3','4'}
+        elif n2 == 9:
+            self.digits = {'1','2','3','4','5','6','7','8','9'}
+        elif n2 == 16:
+            self.digits = {'1','2','3','4','5','6','7','8','9',
+                      "A","B","C","D","E","F"}
+        else:
+            print( 'File size error.', n2,'rows (should be 4, 9, or 16)')
+            return
+        
+        # check columns
+        print(self.digits)
         pass
-
-    def save(self, fileName):
+    
+    def save(self, fileName = []):
+        if fileName == []:
+            print('empty')
         pass
 
     def clear(self):
@@ -106,6 +134,7 @@ root = Tk()
 game = SudokuGame(root)
 #game.mainloop()
 # for debug
+s ='1x3xx9'
 
     
 

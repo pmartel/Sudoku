@@ -14,3 +14,4 @@ for x in range(1,6):
     vLin.append(can.create_line(x*50,0,x*50,500,fill='red'))
 
 can.bell()
+#t = Toplevel(height=100,width=100)
