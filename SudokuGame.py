@@ -90,22 +90,35 @@ class SudokuGame(Frame):
         except FileNotFoundError:
             print('Error opening file',fileName)
             return      
-        b=f.readlines()
+        boxes =f.readlines()
         f.close()
         # check the number of rows is ok
-        n2 = len(b)
-        if n2 == 4:
+        n2 = len(boxes)
+        if n2 != self.nSq:
+            print( "Error, File is for a size", n2, 'board',
+                   'current board is', self.nSq)
+            return
+        elif n2 == 4:
             self.digits = {'1','2','3','4'}
         elif n2 == 9:
             self.digits = {'1','2','3','4','5','6','7','8','9'}
         elif n2 == 16:
             self.digits = {'1','2','3','4','5','6','7','8','9',
-                      "A","B","C","D","E","F"}
+                      "A","B","C","D","E","F",'0'}
         else:
-            print( 'File size error.', n2,'rows (should be 4, 9, or 16)')
+            print( 'File error.', n2,'rows (should be 4, 9, or 16)')
             return
         
-        # check columns
+        # check length of rows
+        for k in range(n2):
+            rowLen = len(boxes[k])-1
+            if  rowLen != n2: # 1 for the line feed
+                print( 'File error. Row',k+1,'is', rowLen,
+                       'characters.  Expecting',n2)
+                return
+            
+        # populate the board
+        
         print(self.digits)
         pass
     
