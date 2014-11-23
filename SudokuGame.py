@@ -81,6 +81,7 @@ class SudokuGame(Frame):
             self.cell.append(Cell(r,c,b,tk,self.nSq))
         pass
 
+    # load and store to files
     def load(self, fileName = []):
         if fileName == []:
             print('empty')
@@ -118,7 +119,15 @@ class SudokuGame(Frame):
                 return
             
         # populate the board
-        
+        for row in range(n2):
+            rowLine = boxes[row]
+            for col in range(n2):
+                v = rowLine[col]
+                if not(v in self.digits):
+                    v = ' '
+                print(v, end = ' ')
+            print('')
+                
         print(self.digits)
         pass
     
@@ -138,7 +147,58 @@ class SudokuGame(Frame):
 
     def undo(self): # was called backup
         pass
-  
+
+    def print(self):
+        """Display the sudoku to the console using unicode box characters"""
+        print('display of Sudoku board')
+        # top line
+        print('\u250c',end='')
+        for j in range(self.n-1):
+            for k in range(self.n):
+                print('\u2500',end='')
+            print('\u252c',end='')
+        for j in range(self.n):
+            print('\u2500',end='')
+        print('\u2510')
+        #ordinary line
+        c=1
+        for j in range(self.n):
+            print('\u2502',end='')
+            for k in range(self.n):
+                print(c,end='')
+                c +=1
+        print('\u2502')
+                
+        #box line
+        print('\u251c',end='')
+        for j in range(self.n-1):
+            for k in range(self.n):
+                print('\u2500',end='')
+            print('\u253c',end='')
+        for j in range(self.n):
+            print('\u2500',end='')
+        print('\u2524')
+        
+        #ordinary line #2
+        c=1
+        for j in range(self.n):
+            print('\u2502',end='')
+            for k in range(self.n):
+                print(c,end='')
+                c +=1
+        print('\u2502')
+
+        #bottom line
+        print('\u2514',end='')
+        for j in range(self.n-1):
+            for k in range(self.n):
+                print('\u2500',end='')
+            print('\u2534',end='')
+        for j in range(self.n):
+            print('\u2500',end='')
+        print('\u2518')
+        
+
 # main routine
 # This creates a window
 root = Tk()
@@ -147,7 +207,7 @@ root = Tk()
 game = SudokuGame(root)
 #game.mainloop()
 # for debug
-s ='1x3xx9'
+game.print()
 
     
 
