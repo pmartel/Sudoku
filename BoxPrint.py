@@ -1,18 +1,24 @@
 """Display the sudoku to the console using unicode box characters.
-    which are '\u2500 to '\u257f  A pdf is in the directory above this."""
+    which are '\u2500 to '\u257f  A pdf describing them
+    is in the directory above this,
+    C:\Users\Phil\Desktop\Computer Languages\Python."""
 
 # these tubles have the left, character space, internal line, heavy line
 # and right symbols
-topLine = ( '\u250f', '\u2501', '\u252f', '\u2533', '\u2513' )
-charLine = ('\u2503', ' ','\u2502', '\u2503', '\u2503'  )
-lightLine = ('\u2520', '\u2500','\u253c','\u2542','\u2528')
-heavyLine = ('\u2523', '\u2501','\u253f','\u254b','\u252b')
-botLine = ('\u2517','\u2501','\u2537','\u253b','\u251b')
 
-testData = '123456789'
+#Bote the 'heavy-line' symbols are too wide.  the 'double-line' version works 
+topLine = ( '\u2554', '\u2550', '\u2564', '\u2566', '\u2557' )
+charLine = ('\u2551', ' ','\u2502', '\u2551', '\u2551'  )
+lightLine = ('\u255f', '\u2500','\u253c','\u256b','\u2562')
+heavyLine = ('\u2560', '\u2550','\u256a','\u256c','\u2563')
+botLine = ('\u255a','\u2550','\u2567','\u2569','\u255d')
+
 
 def pr(s):
     print(s,end="")
+
+def prsp(s):
+    print(s,end=" ")
 
 def fixedLine( lineArr, n ):
     pr(lineArr[0])
@@ -40,18 +46,27 @@ def varLine( lineArr, data, n ):
                 pr(lineArr[4])
     print('')
     
-def BoxPrint( n = 3 ) :
-    """ draw an n^2 x n^2 box """
+def BoxPrint( data, n = 3 ) :
+    """ draw an n^2 x n^2 box and fill it from the n^2 list of n^2
+        length strings 'data' """
     #top line
     fixedLine(topLine,n)
     # middle lines
     for r in range(n):
         for r1 in range(n):
-            varLine(charLine, testData,n)
-    #bottom line
-    fixedLine(botLine,n)
+            row = r * n + r1
+            varLine(charLine, data[row],n)
+            if r1 < n-1:
+                fixedLine(lightLine,n)
+            elif r < n-1:
+                fixedLine(heavyLine,n)
+            else:
+                #bottom line
+                fixedLine(botLine,n)
+                
     
     
             
-
-BoxPrint()
+if __name__ == '__main__':
+    testData = ['1234','4321','2143','4123']
+    BoxPrint(testData,2)
