@@ -44,7 +44,7 @@ for r in range(n2):
 
 for n in range(81):
     e = entList[n]
-    v=e['text']
+    v=e['text'] # has the form PY_VARn
     e.setvar(v,str(n+1))
-
+# use e.get() to recover a string
 
