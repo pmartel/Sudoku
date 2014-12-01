@@ -6,33 +6,37 @@ class Cell:
     row = []
     col = []
     box = []
-    val = []
-    origVal = []
+    val = ''
+    origVal = ''
     
-    def __init__(self, r, c, box, tk, size):
+    def __init__(self, r, c, box, can, game):
+        
         self.row = r
         self.col = c
         self.box = box
-        self.tk = tk
-        self.size=size
-        if size == 16:
+        self.tk = can
+        self.size=game.nSq
+        if self.size == 16:
             self.base = 16
         else:
             self.base = 10
-        # set up value and button
-        self.val = StringVar()
-        self.val.set(' ')
-        self.OrigVal = ' '
-        self.but = Button(tk, bg='white', command = self.pressed,\
-                          relief='groove',padx=10,pady=10,\
-                          textvariable=self.val)
-        self.but.grid(row=r+1, column=c+1)
+        # set up Entry widget
+        siz = game.boxSize
+        xo = game.xOff
+        yo = game.yOff
+        
+        sv = StringVar()
+        self.ent = Entry(can,justify=CENTER, width=1,font=('Arial',16),\
+                    textvariable=sv)
+        self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,\
+                              height = siz-2*xo, width=siz-2*yo,window=self.ent)
+
 
     def reset(self):
         self.val = self.origVal
 
     def getv(self):
-        return self.val
+        return self.ent.get()
 
     def setv(self,v):  # note: just set() overloads the builtin class set
 ##        if self.val == ' ':
@@ -40,7 +44,12 @@ class Cell:
 ##        else:
 ##            # some warning if you try to load over a non-blank?
 ##            pass
-        self.val.set(str(v))
+##for n in range(81):
+##    e = entList[n]
+##    v=e['text'] # has the form PY_VARn
+##    e.setvar(v,str(n+1))
+##        self.val.set(str(v))
+        pass
         
     def pressed(self):
         v = input('? ')
@@ -54,23 +63,50 @@ class Cell:
 class SudokuGame(Frame):
     cell=[]
     digits = {}
+
+    #parameters
+    boxSize = 50
+    xOff = 3
+    yOff = 3
+
     def __init__(self, tk, n=3):
         """ tk is the tkinter object that will display the board.
             n is a number that specifies the board size n^2 x n^2
             Normally 3, it could be 4 (use hex digits).  Possibly 2 for
             a kid. """
-        # set up the graphics
-        self.tk = tk
-        tk.title('Sudoku - Phil Martel')
-        tk.geometry('500x500')
-        super(SudokuGame,self).__init__(tk)
-
-        # set up the cells
-        lab1 = Label(tk,text='  ')# this pushes the grid away from top-left
-        lab1.grid(row=0,column=0)
+        # things related to the number of cells
         self.n = n
         self.nSq = n * n
         self.numCells = self.nSq * self.nSq
+        size = self.boxSize * (self.nSq +1)
+        self.gString = '{0}x{1}'.format(size,size)
+
+        # set up the graphics
+        self.tk = tk
+        tk.title('Sudoku - Phil Martel')
+        tk.geometry(self.gString)
+        super(SudokuGame,self).__init__(tk)
+
+        # set up the cells. Everything is on a canvas
+        self.can = Canvas(tk, height=self.nSq*self.boxSize+self.yOff,\
+                          width=self.nSq*self.boxSize+self.xOff,\
+                          bg='light gray')
+        self.can.grid(row=1,column=1)
+
+        #draw outline
+        for x in range(0,self.nSq+1):
+            if x % 3 == 0:
+                wid = 3
+            else:
+                wid = 1
+            s = self.boxSize # aliases
+            yo = self.yOff
+            xo = self.xOff
+            self.can.create_line(0,x*s+yo,500,x*s+yo,fill='black',width=wid)
+            self.can.create_line(x*s+xo,0,x*s+xo,500,fill='black',width=wid)
+
+        #generate the cells.  Each cell will have a entry widget attached
+        # to the canvas
         for k in range(self.numCells):
             ( r, c) = divmod(k, self.nSq)
             rr = r // self.n
@@ -78,7 +114,7 @@ class SudokuGame(Frame):
             b = rr * self.n + cc
             # this checks that r,c, and b are good
             #print(k,r,c,b)
-            self.cell.append(Cell(r,c,b,tk,self.nSq))
+            self.cell.append(Cell(r,c,b,self.can,self))
         pass
 
     # load and store to files
@@ -149,17 +185,19 @@ class SudokuGame(Frame):
         pass
 
     def print(self):
-        """Display the sudoku to the console using unicode box characters"""
+        """Display the sudoku to the console using the boxPrint routine
+            
+            """
         print('display of Sudoku board')
         # top line
-        print('\u250c',end='')
+        print('\u250f',end='')
         for j in range(self.n-1):
             for k in range(self.n):
-                print('\u2500',end='')
-            print('\u252c',end='')
+                print('\u2501',end='')
+            print('\u252f',end='')
         for j in range(self.n):
-            print('\u2500',end='')
-        print('\u2510')
+            print('\u251f',end='')
+        print('\u2513')
         #ordinary line
         c=1
         for j in range(self.n):
@@ -207,7 +245,7 @@ root = Tk()
 game = SudokuGame(root)
 #game.mainloop()
 # for debug
-game.print()
+
 
     
 
