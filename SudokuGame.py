@@ -1,69 +1,16 @@
 """ This file is a sudoku game.  Later I'll add a solver """
 
 from tkinter import *
+from Cell import *
 
-class Cell:
-    row = []
-    col = []
-    box = []
-    val = ''
-    origVal = ''
-    
-    def __init__(self, r, c, box, can, game):
-        
-        self.row = r
-        self.col = c
-        self.box = box
-        self.tk = can
-        self.size=game.nSq
-        if self.size == 16:
-            self.base = 16
-        else:
-            self.base = 10
-        # set up Entry widget
-        siz = game.boxSize
-        xo = game.xOff
-        yo = game.yOff
-        
-        sv = StringVar()
-        self.ent = Entry(can,justify=CENTER, width=1,font=('Arial',16),\
-                    textvariable=sv)
-        self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,\
-                              height = siz-2*xo, width=siz-2*yo,window=self.ent)
-
-
-    def reset(self):
-        self.val = self.origVal
-
-    def getv(self):
-        return self.ent.get()
-
-    def setv(self,v):  # note: just set() overloads the builtin class set
-##        if self.val == ' ':
-##            self.val.set(str(v))
-##        else:
-##            # some warning if you try to load over a non-blank?
-##            pass
-##for n in range(81):
-##    e = entList[n]
-##    v=e['text'] # has the form PY_VARn
-##    e.setvar(v,str(n+1))
-##        self.val.set(str(v))
-        pass
-        
-    def pressed(self):
-        v = input('? ')
-        vInt = int(v,self.base)
-        if vInt >= 1 and vInt <= self.size :
-            self.setv(vInt)
-        else:
-            print('Bad value. Should be digit between 1 and',self.size)
-        pass
-    
 class SudokuGame(Frame):
     cell=[]
-    digits = {}
 
+    # dictionary holding valid characters for a given size game
+    digits = { 4: (' ','1','2','3','4')}
+    digits[9] = (' ','1','2','3','4','5','6','7','8','9')
+    digits[16] = (' ','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F')
+    
     #parameters
     boxSize = 50
     xOff = 3
@@ -135,16 +82,7 @@ class SudokuGame(Frame):
             print( "Error, File is for a size", n2, 'board',
                    'current board is', self.nSq)
             return
-        elif n2 == 4:
-            self.digits = {'1','2','3','4'}
-        elif n2 == 9:
-            self.digits = {'1','2','3','4','5','6','7','8','9'}
-        elif n2 == 16:
-            self.digits = {'1','2','3','4','5','6','7','8','9',
-                      "A","B","C","D","E","F",'0'}
-        else:
-            print( 'File error.', n2,'rows (should be 4, 9, or 16)')
-            return
+
         
         # check length of rows
         for k in range(n2):
