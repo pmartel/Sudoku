@@ -43,13 +43,24 @@ class Cell:
         s = 'row {0} col {1} new<{2}> old<{3}> {4}'.format(\
             self.row,self.col,c,oldC, reason)
         print(s)
+        if reason != 'key':
+            return False
+        
         if len(c) > 2:
             print( 'c is too long')
         elif len(c) == 2:
-            
-
-        return c in dic
-        return True
+            # select the new part
+            n = c.find(oldC)
+            v = c[1-n];
+            if v in dic:
+                # v is a good new value, but it has to be jammed in
+                nam = e['text']
+                e.setvar(nam,v)
+            #whether the new value is good or bad, don't let it be changed to c
+            return False 
+        elif len(c) == 1:
+            return (c in dic)
+        return False
     
     def reset(self):
         self.val = self.origVal
