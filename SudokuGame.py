@@ -183,6 +183,8 @@ root = Tk()
 game = SudokuGame(root)
 #game.mainloop()
 # for debug
+c = game.cell[0]
+e = c.ent
 
 
     

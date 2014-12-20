@@ -31,25 +31,25 @@ class Cell:
         okCmd = can.register(self.isOk)
         self.ent = Entry(can,justify=CENTER, width=1,font=('Arial',16),\
                     textvariable=sv, validate='all',\
-                    validatecommand=(okCmd,'%P','%V') )
+                    validatecommand=(okCmd,'%P','%s','%V') )
         self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,\
                               height = siz-2*xo, width=siz-2*yo,window=self.ent)
 
 
-    def isOk(self, c, reason):
+    def isOk(self, c, oldC, reason):
         dic = self.game.digits[self.size]
         e = self.ent # the Entry
-        print(self.row,self.col,c,reason)
-        if reason == 'focusin':
-            self.oldchar = e.get()
-            e.delete(0)
-            return False
-        elif reason == 'focusout':
-            if c == '':
-                self.setv(self.oldchar)
-                return False
-        elif reason == 'key':        
-            return c in dic
+        # debug data
+        s = 'row {0} col {1} new<{2}> old<{3}> {4}'.format(\
+            self.row,self.col,c,oldC, reason)
+        print(s)
+        if len(c) > 2:
+            print( 'c is too long')
+        elif len(c) == 2:
+            
+
+        return c in dic
+        return True
     
     def reset(self):
         self.val = self.origVal
