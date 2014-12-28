@@ -1,10 +1,10 @@
 """ This file is me learning about menus """
 
 from tkinter import *
-#simpledialog is a module in tkinter which has multiple classes
-# importing from it lets you avoid simpledialog.SimpleDialog()
-from tkinter.simpledialog import *
-from tkinter.messagebox import *
+#messagebox is a module in tkinter which has multiple classes
+# importing from it lets you avoid messagebix.showinfo(), but it may cause
+# clashes
+#from tkinter.messagebox import *
 from tkinter import filedialog
 
 class MenuTest(Frame):
@@ -33,12 +33,13 @@ class MenuTest(Frame):
         pass
 
     def __aboutHandler(self):
-        self.help = showinfo( title='Playing with the GUI',
+        self.help = messagebox.showinfo( title='Playing with the GUI',
                  message='Menu Test')
         pass
 
     def __openHandler(self):
-        f = filedialog()
+        self.fd = filedialog.FileDialog(self)
+##        self.file=self.fd.Open()
         pass
 # main routine
 # This creates a window
