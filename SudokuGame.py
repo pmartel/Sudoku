@@ -3,6 +3,7 @@
 from tkinter import *
 #import tkmessagebox
 from Cell import *
+from SudokuMenu import *
 
 class SudokuGame(Frame):
     cell=[]
@@ -64,25 +65,9 @@ class SudokuGame(Frame):
             #print(k,r,c,b)
             self.cell.append(Cell(r,c,b,self.can,self))
         # add a menu
-        self.top = self.can.winfo_toplevel()
-        self.menuBar = Menu(self.top)
-        self.top['menu'] = self.menuBar
-        self.subMenu = Menu(self.menuBar)
-        self.menuBar.add_cascade(label='Help', menu=self.subMenu)
-        self.subMenu.add_command(label='About', command=self.__aboutHandler)
+        self.menu = SudokuMenu(self)
         pass
 
-    def __aboutHandler(self):
-        #m = tkMessageBox()
-        #m = MessageBox()
-        #m = Box()
-        #m = SimpleDialog()
-        #m = DialogBox()
-        #m = Dialog()
-        m = tkmessagebox()
-        m.showinfo('About Sudoku', 'sudoku game\nwritten in Python\n'\
-                    'by Phil Martel 11/2014 - ')
-        pass
     
     # load and store to files
     def load(self, fileName = []):
