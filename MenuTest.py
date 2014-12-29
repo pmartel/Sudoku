@@ -38,8 +38,10 @@ class MenuTest(Frame):
         pass
 
     def __openHandler(self):
-        self.fd = filedialog.FileDialog(self)
-##        self.file=self.fd.Open()
+        #this opens some kind of box, but how to use it?
+        #self.fd = filedialog.FileDialog(self)
+        #self.file=self.fd.Open()
+        self.file = filedialog.askopenfilename()
         pass
 # main routine
 # This creates a window
