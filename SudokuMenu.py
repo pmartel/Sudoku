@@ -2,14 +2,18 @@
 from tkinter import *
 
 class SudokuMenu(Frame):
-    def __init__( self,master ):
-        self.top = master.winfo_toplevel()
+    def __init__( self,parent ):
+        self.parent = parent
+        self.top = parent.winfo_toplevel()
         self.menuBar = Menu(self.top)
         self.top['menu'] = self.menuBar
         #File
         self.subMenuFile = Menu(self.menuBar)
         self.menuBar.add_cascade(label='File', menu=self.subMenuFile)
+        self.subMenuFile.add_command(label='New', command=self.__newHandler)
         self.subMenuFile.add_command(label='Open', command=self.__openHandler)
+        self.subMenuFile.add_command(label='SaveAs',
+                                     command=self.__saveAsHandler)
         #Help
         self.subMenuHelp = Menu(self.menuBar)
         self.menuBar.add_cascade(label='Help', menu=self.subMenuHelp)
@@ -22,8 +26,15 @@ class SudokuMenu(Frame):
         pass
 
     def __openHandler(self):
-        #this opens some kind of box, but how to use it?
-        #self.fd = filedialog.FileDialog(self)
-        #self.file=self.fd.Open()
-        self.file = filedialog.askopenfilename()
+        self.filename = filedialog.askopenfilename()
+        self.parent.load(self.filename)
+        pass
+
+    def __newHandler(self):
+        self.parent.clear()
+        pass
+
+    def __saveAsHandler(self):
+        self.filename = filedialog.asksaveasfilename()
+        self.parent.save(self.filename)
         pass
