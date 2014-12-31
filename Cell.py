@@ -29,19 +29,19 @@ class Cell:
         
         sv = StringVar()
         okCmd = can.register(self.isOk)
-        self.ent = Entry(can,justify=CENTER, width=1,font=('Arial',16),\
-                    textvariable=sv, validate='all',\
+        self.ent = Entry(can,justify=CENTER, width=1,font=('Arial',16),
+                    textvariable=sv, validate='all',
                     validatecommand=(okCmd,'%P','%s','%V') )
-        self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,\
+        self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,
                               height = siz-2*xo, width=siz-2*yo,window=self.ent)
         self.digits = self.game.digits[self.size]
 
 
     def isOk(self, c, oldC, reason):
-##        # debug data
-##        s = 'row {0} col {1} new<{2}> old<{3}> {4}'.format(\
-##            self.row,self.col,c,oldC, reason)
-##        print(s)
+##        debug data
+        s = 'row {0} col {1} new<{2}> old<{3}> {4}'.format(
+            self.row,self.col,c,oldC, reason)
+        print(s)
         if reason != 'key':
             return False
         
@@ -53,7 +53,7 @@ class Cell:
             v = c[1-n];
             if v in self.digits:
                 # v is a good new value, but it has to be jammed in
-                setv(v)
+                self.setv(v)
             #whether the new value is good or bad, don't let it be changed to c
             return False 
         elif len(c) == 1:
