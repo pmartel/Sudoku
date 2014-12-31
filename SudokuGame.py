@@ -122,7 +122,19 @@ class SudokuGame(Frame):
         except FileNotFoundError:
             print("Error, can't write to file <{0}>".format(fileName))
             return
-        f.writelines('test')
+        for row in range(self.nSq):
+            rowline=''
+            for col in range(self.nSq):
+                n = row * self.nSq + col
+                c = self.cell[n]
+                v = c.getv()
+                if len(v) > 1:
+                    print( "long string <{0}> at r{1} c{2}".format(v,row,col))
+                if v == ' ':
+                    v = '.'
+                rowline += v
+            print(rowline)
+            f.writelines(rowline+'\n')
         f.close()
         pass
 

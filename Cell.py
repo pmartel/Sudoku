@@ -34,7 +34,7 @@ class Cell:
                     validatecommand=(okCmd,'%P','%s','%V') )
         self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,\
                               height = siz-2*xo, width=siz-2*yo,window=self.ent)
-        self.dic = self.game.digits[self.size]
+        self.digits = self.game.digits[self.size]
 
 
     def isOk(self, c, oldC, reason):
@@ -51,13 +51,13 @@ class Cell:
             # select the new part
             n = c.find(oldC)
             v = c[1-n];
-            if v in self.dic:
+            if v in self.digits:
                 # v is a good new value, but it has to be jammed in
                 setv(v)
             #whether the new value is good or bad, don't let it be changed to c
             return False 
         elif len(c) == 1:
-            return (c in dic)
+            return (c in self.digits)
         return False
     
     def reset(self):
@@ -67,7 +67,7 @@ class Cell:
         return self.ent.get()
 
     def setv(self,v):  # note: just set() overloads the builtin class set
-        if v in self.dic:
+        if v in self.digits:
             e = self.ent # the Entry
             nam = e['text'] # the name of the StringVar
             e.setvar(nam,v)
