@@ -51,6 +51,7 @@ def varLine( lineArr, data, n ):
 def BoxPrint( data, n = 3 ) :
     """ draw an n^2 x n^2 box and fill it from the n^2 list of n^2
         length strings 'data' """
+    print("\nDisplay of sudoku board")
     #top line
     fixedLine(topLine,n)
     # middle lines

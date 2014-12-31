@@ -14,6 +14,8 @@ class SudokuMenu(Frame):
         self.subMenuFile.add_command(label='Open', command=self.__openHandler)
         self.subMenuFile.add_command(label='SaveAs',
                                      command=self.__saveAsHandler)
+        self.subMenuFile.add_command(label='Print',
+                                     command=self.__PrintHandler)
         #Help
         self.subMenuHelp = Menu(self.menuBar)
         self.menuBar.add_cascade(label='Help', menu=self.subMenuHelp)
@@ -39,4 +41,8 @@ class SudokuMenu(Frame):
         self.filename = filedialog.asksaveasfilename(defaultextension='.sud',
             filetypes=[('Sudoku Files','.sud'), ('All Files', '.*')])
         self.parent.save(self.filename)
+        pass
+
+    def __PrintHandler(self):
+        self.parent.print()
         pass

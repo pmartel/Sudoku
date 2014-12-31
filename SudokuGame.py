@@ -4,6 +4,7 @@ from tkinter import *
 #import tkmessagebox
 from Cell import *
 from SudokuMenu import *
+from BoxPrint import BoxPrint
 
 class SudokuGame(Frame):
     cell=[]
@@ -64,6 +65,8 @@ class SudokuGame(Frame):
             # this checks that r,c, and b are good
             #print(k,r,c,b)
             self.cell.append(Cell(r,c,b,self.can,self))
+        #clear board
+        self.clear()
         # add a menu
         self.menu = SudokuMenu(self)
         pass
@@ -106,12 +109,8 @@ class SudokuGame(Frame):
                 n = row * n2 + col
                 c = self.cell[n]  
                 c.setv(v)
-                c.origVal = v
-##                print(v, end = ' ')
-##            print('')
-                
-##        print(self.digits[n2])
-        pass
+                c.origVal = v # so that reload works
+#        pass
     
     def save(self, fileName = []):
         if fileName == []:
@@ -157,57 +156,23 @@ class SudokuGame(Frame):
     def undo(self): # was called backup
         pass
 
-    def print(self):
-        """Display the sudoku to the console using the boxPrint routine
-            """
-        print('display of Sudoku board')
-        # top line
-        print('\u250f',end='')
-        for j in range(self.n-1):
-            for k in range(self.n):
-                print('\u2501',end='')
-            print('\u252f',end='')
-        for j in range(self.n):
-            print('\u251f',end='')
-        print('\u2513')
-        #ordinary line
-        c=1
-        for j in range(self.n):
-            print('\u2502',end='')
-            for k in range(self.n):
-                print(c,end='')
-                c +=1
-        print('\u2502')
-                
-        #box line
-        print('\u251c',end='')
-        for j in range(self.n-1):
-            for k in range(self.n):
-                print('\u2500',end='')
-            print('\u253c',end='')
-        for j in range(self.n):
-            print('\u2500',end='')
-        print('\u2524')
-        
-        #ordinary line #2
-        c=1
-        for j in range(self.n):
-            print('\u2502',end='')
-            for k in range(self.n):
-                print(c,end='')
-                c +=1
-        print('\u2502')
 
-        #bottom line
-        print('\u2514',end='')
-        for j in range(self.n-1):
-            for k in range(self.n):
-                print('\u2500',end='')
-            print('\u2534',end='')
-        for j in range(self.n):
-            print('\u2500',end='')
-        print('\u2518')
-        
+    
+    def print(self):
+        data = []
+        for row in range(self.nSq):
+            rowline=''
+            for col in range(self.nSq):
+                n = row * self.nSq + col
+                c = self.cell[n]
+                v = c.getv()
+                if len(v) > 1:
+                    print( "long string <{0}> at r{1} c{2}".format(v,row,col))
+                rowline += v
+            data.append(rowline)
+            pass
+        BoxPrint(data)
+        pass
 
 # main routine
 # This creates a window
