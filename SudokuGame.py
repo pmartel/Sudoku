@@ -72,29 +72,28 @@ class SudokuGame(Frame):
     # load and store to files
     def load(self, fileName = []):
         if fileName == []:
-            print('empty')
+            print('No file selected')
         #open the file and read the board
         try :
             f = open(fileName,'r')
         except FileNotFoundError:
-            print('Error opening file',fileName)
+            print('Error opening file <{0}>'.format(fileName))
             return      
         boxes =f.readlines()
         f.close()
         # check the number of rows is ok
         n2 = len(boxes)
         if n2 != self.nSq:
-            print( "Error, File is for a size", n2, 'board',
-                   'current board is', self.nSq)
+            print( "Error, File <{0}> is for a size".format(filename),
+                   n2, 'board', 'current board is', self.nSq)
             return
-
         
         # check length of rows
         for k in range(n2):
             rowLen = len(boxes[k])-1
             if  rowLen != n2: # 1 for the line feed
-                print( 'File error. Row',k+1,'is', rowLen,
-                       'characters.  Expecting',n2)
+                print( 'File error in {0}.'.format(filename), 'Row',k+1,
+                       'is', rowLen, 'characters.  Expecting',n2)
                 return
             
         # populate the board
@@ -102,23 +101,42 @@ class SudokuGame(Frame):
             rowLine = boxes[row]
             for col in range(n2):
                 v = rowLine[col]
-                if not(v in self.digits):
+                if not(v in self.digits[n2]):
                     v = ' '
-                print(v, end = ' ')
-            print('')
+                n = row * n2 + col
+                c = self.cell[n]  
+                c.setv(v)
+                c.origVal = v
+##                print(v, end = ' ')
+##            print('')
                 
-        print(self.digits)
+##        print(self.digits[n2])
         pass
     
     def save(self, fileName = []):
         if fileName == []:
-            print('empty')
+            print('No file selected')
+        #open the file and read the board
+        try :
+            f = open(fileName,'w')
+        except FileNotFoundError:
+            print("Error, can't write to file <{0}>".format(fileName))
+            return
+        f.writelines('test')
+        f.close()
         pass
 
     def clear(self):
+        for n in range(self.numCells):
+            c = self.cell[n]
+            c.setv(' ')
+            c.origVal = ' '
         pass
 
     def restart(self):
+        for n in range(self.numCells):
+            c = self.cell[n]
+            c.setv(c.origVal)
         pass
 
     def check(self):
@@ -129,7 +147,6 @@ class SudokuGame(Frame):
 
     def print(self):
         """Display the sudoku to the console using the boxPrint routine
-            
             """
         print('display of Sudoku board')
         # top line

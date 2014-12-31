@@ -26,7 +26,8 @@ class SudokuMenu(Frame):
         pass
 
     def __openHandler(self):
-        self.filename = filedialog.askopenfilename()
+        self.filename = filedialog.askopenfilename(
+            filetypes=[('Sudoku Files','.sud'), ('All Files', '.*')])
         self.parent.load(self.filename)
         pass
 
@@ -35,6 +36,7 @@ class SudokuMenu(Frame):
         pass
 
     def __saveAsHandler(self):
-        self.filename = filedialog.asksaveasfilename()
+        self.filename = filedialog.asksaveasfilename(defaultextension='.sud',
+            filetypes=[('Sudoku Files','.sud'), ('All Files', '.*')])
         self.parent.save(self.filename)
         pass
