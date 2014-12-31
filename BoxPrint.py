@@ -1,9 +1,11 @@
 """Display the sudoku to the console using unicode box characters.
-    which are '\u2500 to '\u257f  A pdf describing them
-    is in the directory above this,
-    C:\Users\Phil\Desktop\Computer Languages\Python."""
+    which are '\u2500' to '\u257f'.
+    A pdf describing them is in the directory above this:
+    C:\ Users\Phil\Desktop\Computer Languages\Python.
+    NOTE the spzce after C:\ avoids Python thinking Users... is unicode
+    """
 
-# these tubles have the left, character space, internal line, heavy line
+# these tuples have the left, character space, internal line, heavy line
 # and right symbols
 
 #Bote the 'heavy-line' symbols are too wide.  the 'double-line' version works 
