@@ -34,15 +34,14 @@ class Cell:
                     validatecommand=(okCmd,'%P','%s','%V') )
         self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,\
                               height = siz-2*xo, width=siz-2*yo,window=self.ent)
+        self.dic = self.game.digits[self.size]
 
 
     def isOk(self, c, oldC, reason):
-        dic = self.game.digits[self.size]
-        e = self.ent # the Entry
-        # debug data
-        s = 'row {0} col {1} new<{2}> old<{3}> {4}'.format(\
-            self.row,self.col,c,oldC, reason)
-        print(s)
+##        # debug data
+##        s = 'row {0} col {1} new<{2}> old<{3}> {4}'.format(\
+##            self.row,self.col,c,oldC, reason)
+##        print(s)
         if reason != 'key':
             return False
         
@@ -52,10 +51,9 @@ class Cell:
             # select the new part
             n = c.find(oldC)
             v = c[1-n];
-            if v in dic:
+            if v in self.dic:
                 # v is a good new value, but it has to be jammed in
-                nam = e['text']
-                e.setvar(nam,v)
+                setv(v)
             #whether the new value is good or bad, don't let it be changed to c
             return False 
         elif len(c) == 1:
@@ -69,20 +67,13 @@ class Cell:
         return self.ent.get()
 
     def setv(self,v):  # note: just set() overloads the builtin class set
-##        if self.val == ' ':
-##            self.val.set(str(v))
-##        else:
-##            # some warning if you try to load over a non-blank?
-##            pass
-##for n in range(81):
-##    e = entList[n]
-##    v=e['text'] # has the form PY_VARn
-##    e.setvar(v,str(n+1))
-##        self.val.set(str(v))
-##also
-##e.select_range(0,1)
-        pass
-        
+        if v in self.dic:
+            e = self.ent # the Entry
+            nam = e['text'] # the name of the StringVar
+            e.setvar(nam,v)
+            return True
+        return False
+    
     def pressed(self):
         v = input('? ')
         vInt = int(v,self.base)
