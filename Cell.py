@@ -53,7 +53,7 @@ class Cell:
             v = c[1-n];
             if v in self.digits:
                 # v is a good new value, but it has to be jammed in
-                self.setv(v)
+                setv(v)
             #whether the new value is good or bad, don't let it be changed to c
             return False 
         elif len(c) == 1:
