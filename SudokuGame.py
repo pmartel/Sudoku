@@ -65,15 +65,16 @@ class SudokuGame(Frame):
             # this checks that r,c, and b are good
             #print(k,r,c,b)
             self.cell.append(Cell(r,c,b,self.can,self))
-        #clear board
-        self.clear()
         # add a menu
         self.menu = SudokuMenu(self)
+        #clear board
+        #self.clear()
         pass
 
     
     # load and store to files
     def load(self, fileName = []):
+        print('SudokuGame.load({0})'.format(fileName))
         if fileName == []:
             print('No file selected')
         #open the file and read the board
@@ -182,8 +183,10 @@ root = Tk()
 game = SudokuGame(root)
 #game.mainloop()
 # for debug
-c = game.cell[0]
-e = c.ent
+c0 = game.cell[0]
+c10 =game.cell[10]
+c52 =game.cell[52]
+
 
 
     
