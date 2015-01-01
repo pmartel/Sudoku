@@ -26,29 +26,39 @@ class Cell:
         yo = game.yOff
         
         sv = StringVar()
-        self.ent = Entry(can,justify=CENTER, width=1,font=('Arial',16),\
-                    textvariable=sv)
-        self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,\
+        okCmd = can.register(self.isOk)
+        self.ent = Entry(can,justify=CENTER, width=1,font=('Arial',16),
+                    textvariable=sv, validate='all',
+                    validatecommand=(okCmd,'%d','%i','%P','%s','%S',
+                                     '%v','%V','%W') )
+        self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,
                               height = siz-2*xo, width=siz-2*yo,window=self.ent)
 
 
+    def isOk(self, d, i, p, s, S, v, V, W):
+        print( 'isOk called with:')
+        print( 'self',self)
+        print( '  %d',d)
+        print( '  %i',i)
+        print( '  %p',p)
+        print( '  %s',s)
+        print( '  %S',S)
+        print( '  %v',v)
+        print( '  %V',V)
+        print( '  %W',W)
+        return True
+        
     def reset(self):
         self.val = self.origVal
 
     def getv(self):
         return self.ent.get()
 
-    def setv(self,v):  # note: just set() overloads the builtin class set
-##        if self.val == ' ':
-##            self.val.set(str(v))
-##        else:
-##            # some warning if you try to load over a non-blank?
-##            pass
-##for n in range(81):
-##    e = entList[n]
-##    v=e['text'] # has the form PY_VARn
-##    e.setvar(v,str(n+1))
-##        self.val.set(str(v))
+    def setv(self,s):  # note: just set() overloads the builtin class set
+        e = self.ent
+        v=e['text'] # has the form PY_VARn
+        e.setvar(v,s)
+        #self.val.set(str(v))
         pass
         
     def pressed(self):
@@ -245,6 +255,8 @@ root = Tk()
 game = SudokuGame(root)
 #game.mainloop()
 # for debug
+c0=game.cell[0]
+c10=game.cell[10]
 
 
     
