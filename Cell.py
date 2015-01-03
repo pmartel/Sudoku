@@ -31,9 +31,10 @@ class Cell:
         yo = game.yOff
         
         sv = StringVar()
-        okCmd = can.register(self.isOk)
+        top = game.winfo_toplevel()
+        okCmd = top.register(self.isOk)
         self.ent = Entry(can, justify=CENTER, width=1, font=('Arial',16),
-                    textvariable=sv, validate='all',
+                    textvariable=sv, validate='key',
                     validatecommand=(okCmd,'%d','%i','%P','%s','%S',
                                      '%v','%V','%W') )
         self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,
@@ -48,11 +49,11 @@ class Cell:
     textvariable, the argument will be -1.
         '%P' - The value that the text will have if the change is allowed.
         '%s' - The text in the entry before the change.
-        '%S' - If the call was due to an insertion or deletion, this argument will be the text being inserted or
-    deleted.
+        '%S' - If the call was due to an insertion or deletion, this argument
+    will be the text being inserted or deleted.
         '%v' - The current value of the widget's validate option
-        '%V' - The reason for this callback: one of 'focusin', 'focusout', 'key', or 'forced' if the
-    textvariable was changed
+        '%V' - The reason for this callback: one of 'focusin', 'focusout',
+    'key', or 'forced' if the textvariable was changed
         '%W' - The name of the widget.
 
     Use them all for now, print them for debug
@@ -65,25 +66,26 @@ class Cell:
         print( 'self',self)
         print( '  %d',d)
         print( '  %i',i)
-        print( '  %p',p)
-        print( '  %s',s)
-        print( '  %S',S)
+        print( '  %p<{0}>'.format(p))
+        print( '  %s<{0}>'.format(s))
+        print( '  %S<{0}>'.format(S))
         print( '  %v',v)
         print( '  %V',V)
         print( '  %W',W)
+        print( 'entry validate',self.ent['validate'])
 
         if V == 'key':
-            if len(S) > 1:
-                print( '%S is too long')
+            if len(S)>1:
+                print('S is too long')
             else:
                 if S in self.digits:
                     # S is a good new value, jam it in
-                    print( 'setting', S)
                     self.setv(S)
+                    self.ent['validate']='key'
+                             
         #whether the new value is good or bad, don't let it be changed
-        # by the routin that called us.
-        print('returning',retVal )
-        return retVal
+        # by the routine that called us.
+        return False
     
     def reset(self):
         self.val = self.origVal
@@ -92,11 +94,12 @@ class Cell:
         return self.ent.get()
 
     def setv(self,v):  # note: just set() overloads the builtin class set
-        print("in setv for cell[{0}] set '{1}'".format(self.idx,v))
+##        print("in setv for cell[{0}] set '{1}'".format(self.idx,v))
         if v in self.digits:
             e = self.ent # the Entry
             nam = e['text'] # the name of the StringVar
             e.setvar(nam,v)
+            e['validate']='key'
             return True
         return False
     

@@ -96,7 +96,7 @@ class SudokuGame(Frame):
         for k in range(n2):
             rowLen = len(boxes[k])-1
             if  rowLen != n2: # 1 for the line feed
-                print( 'File error in {0}.'.format(filename), 'Row',k+1,
+                print( 'File error in {0}.'.format(fileName), 'Row',k+1,
                        'is', rowLen, 'characters.  Expecting',n2)
                 return
             
