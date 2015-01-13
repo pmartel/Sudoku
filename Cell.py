@@ -62,17 +62,17 @@ class Cell:
     def isOk(self, d, i, p, s, S, v, V, W):
         retVal = False
 ##        debug data
-        print( 'isOk called with:')
-        print( 'self',self)
-        print( '  %d',d)
-        print( '  %i',i)
-        print( '  %p<{0}>'.format(p))
-        print( '  %s<{0}>'.format(s))
-        print( '  %S<{0}>'.format(S))
-        print( '  %v',v)
-        print( '  %V',V)
-        print( '  %W',W)
-        print( 'entry validate',self.ent['validate'])
+##        print( 'isOk called with:')
+##        print( 'self',self)
+##        print( '  %d',d)
+##        print( '  %i',i)
+##        print( '  %p<{0}>'.format(p))
+##        print( '  %s<{0}>'.format(s))
+##        print( '  %S<{0}>'.format(S))
+##        print( '  %v',v)
+##        print( '  %V',V)
+##        print( '  %W',W)
+##        print( 'entry validate',self.ent['validate'])
 
         if V == 'key':
             if len(S)>1:
@@ -81,7 +81,6 @@ class Cell:
                 if S in self.digits:
                     # S is a good new value, jam it in
                     self.setv(S)
-                    self.ent['validate']='key'
                              
         #whether the new value is good or bad, don't let it be changed
         # by the routine that called us.
