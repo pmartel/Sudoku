@@ -8,7 +8,8 @@ from BoxPrint import BoxPrint
 
 class SudokuGame(Frame):
     cell=[]
-
+    undoStack = []
+    
     # dictionary holding valid characters for a given size game
     digits = { 4: (' ','1','2','3','4')}
     digits[9] = (' ','1','2','3','4','5','6','7','8','9')
@@ -18,7 +19,8 @@ class SudokuGame(Frame):
     boxSize = 50
     xOff = 3
     yOff = 3
-
+    extraWidth = 100 # for buttons
+    
     def __init__(self, tk, n=3):
         """ tk is the tkinter object that will display the board.
             n is a number that specifies the board size n^2 x n^2
@@ -29,7 +31,9 @@ class SudokuGame(Frame):
         self.nSq = n * n
         self.numCells = self.nSq * self.nSq
         size = self.boxSize * (self.nSq +1)
-        self.gString = '{0}x{1}'.format(size,size)
+        self.size = size
+
+        self.gString = '{0}x{1}'.format(size+self.extraWidth,size)
 
         # set up the graphics
         self.tk = tk
@@ -38,9 +42,9 @@ class SudokuGame(Frame):
         super(SudokuGame,self).__init__(tk)
 
         # set up the cells. Everything is on a canvas
-        self.can = Canvas(tk, height=self.nSq*self.boxSize+self.yOff,\
-                          width=self.nSq*self.boxSize+self.xOff,\
-                          bg='light gray')
+        self.can = Canvas(tk, height=self.nSq*self.boxSize+self.yOff,
+                          width=self.nSq*self.boxSize+self.xOff+
+                          self.extraWidth, bg='light gray')
         self.can.grid(row=1,column=1)
 
         #draw outline
@@ -52,8 +56,10 @@ class SudokuGame(Frame):
             s = self.boxSize # aliases
             yo = self.yOff
             xo = self.xOff
-            self.can.create_line(0,x*s+yo,500,x*s+yo,fill='black',width=wid)
-            self.can.create_line(x*s+xo,0,x*s+xo,500,fill='black',width=wid)
+            xyMax = self.size -s
+            
+            self.can.create_line(0,x*s+yo,xyMax+xo,x*s+yo,fill='black',width=wid)
+            self.can.create_line(x*s+xo,0,x*s+xo,xyMax+yo,fill='black',width=wid)
 
         #generate the cells.  Each cell will have a entry widget attached
         # to the canvas
@@ -67,6 +73,13 @@ class SudokuGame(Frame):
             self.cell.append(Cell(r,c,b,self.can,self))
         # add a menu
         self.menu = SudokuMenu(self)
+        #add buttons
+        self.restartButton = Button(tk,command = self.restart, text='Restart')
+        self.can.create_window(xyMax+10,10,window=self.restartButton,
+                               anchor=NW)       
+        self.undoButton = Button(tk,command = self.undo, text='Undo')
+        self.can.create_window(xyMax+10,s+10,window=self.undoButton,
+                               anchor=NW)       
         #clear board
         #self.clear()
         pass
@@ -111,6 +124,7 @@ class SudokuGame(Frame):
                 c = self.cell[n]  
                 c.setv(v)
                 c.origVal = v # so that reload works
+        self.undoStack.clear()  # don't undo past a load point          
 #        pass
     
     def save(self, fileName = []):
@@ -143,18 +157,21 @@ class SudokuGame(Frame):
             c = self.cell[n]
             c.setv(' ')
             c.origVal = ' '
+        self.undoStack.clear() # don't undo past a clear point
         pass
 
     def restart(self):
         for n in range(self.numCells):
             c = self.cell[n]
             c.setv(c.origVal)
+        self.undoStack.clear() # don't undo past a restart point
         pass
 
     def check(self):
         pass
 
     def undo(self): # was called backup
+        print('undo')
         pass
 
 
