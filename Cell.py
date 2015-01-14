@@ -40,6 +40,7 @@ class Cell:
         self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,
                                    height = siz-2*xo, width=siz-2*yo,
                                    window=self.ent)
+        self.setv(' ')
 
     """ Callback substitution codes:
         '%d' - Action code: 0 for an attempted deletion, 1 for an attempted insertion, or -1 if the callback was
@@ -79,9 +80,11 @@ class Cell:
                 print('S is too long')
             else:
                 if S in self.digits:
-                    # S is a good new value, jam it in
+                    # S is a good new value, save the old value, jam new one in
+                    old = self.getv()
+                    self.game.undoStack.append((self.idx, old))
                     self.setv(S)
-                             
+       
         #whether the new value is good or bad, don't let it be changed
         # by the routine that called us.
         return False

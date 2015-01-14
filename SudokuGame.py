@@ -171,7 +171,12 @@ class SudokuGame(Frame):
         pass
 
     def undo(self): # was called backup
-        print('undo')
+        if len(self.undoStack) > 0:
+            uData = self.undoStack.pop()
+            print('undo',uData)
+            self.cell[uData[0]].setv(uData[1])
+        else:              
+            print('undo stack empty')
         pass
 
 
