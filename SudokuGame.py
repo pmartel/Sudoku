@@ -1,5 +1,5 @@
 """ This file is a sudoku game.  Later I'll add a solver """
-
+# TO-DO: save game on close
 from tkinter import *
 #import tkmessagebox
 from Cell import *
@@ -82,6 +82,10 @@ class SudokuGame(Frame):
                                anchor=NW)       
         #clear board
         #self.clear()
+
+        #set up exit actions
+##        import atexit
+##        atexit.register(self.__exit__)
         pass
 
     
@@ -130,7 +134,7 @@ class SudokuGame(Frame):
     def save(self, fileName = []):
         if fileName == []:
             print('No file selected')
-        #open the file and read the board
+        #open the file and write the board
         try :
             f = open(fileName,'w')
         except FileNotFoundError:
@@ -150,6 +154,9 @@ class SudokuGame(Frame):
             print(rowline)
             f.writelines(rowline+'\n')
         f.close()
+        #clear undo stack.  We may want a different indicator that
+        # nothing has changed after a save
+        self.undoStack.clear()          
         pass
 
     def clear(self):
@@ -182,6 +189,7 @@ class SudokuGame(Frame):
 
     
     def print(self):
+        """ prettyprint the board """
         data = []
         for row in range(self.nSq):
             rowline=''
@@ -197,7 +205,14 @@ class SudokuGame(Frame):
         BoxPrint(data)
         pass
 
+    def quit(self):
+        print( 'quitting')
+
+
+
+###########################################################
 # main routine
+###########################################################
 # This creates a window
 root = Tk()
 
