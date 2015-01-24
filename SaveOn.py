@@ -5,8 +5,9 @@ from tkinter import *
 class SaveOn():
     tk = None
     filename = None
-    changed = False
-
+    closing = False
+    closeEv = []
+    
     def __init__(self):
         tk = Tk()
         self.tk = tk
@@ -37,12 +38,14 @@ class SaveOn():
                                      command=self.__PrintHandler)
             
         # setting up to interrupt destroy
-        self.top.bind('<Destroy>',self.__SaveOnClosing)
-        print(self.txt.bindtags())
+        #self.top.bind('<Destroy>',self.__SaveOnClosing)
+        self.top.protocol("WM_DELETE_WINDOW", self.__SaveOnClosing)
+        #print(self.txt.bindtags())
         pass
 
     # menu command handlers
     def __openHandler(self):
+        self.checkChanged()
         oldFileName = self.filename
         self.filename = filedialog.askopenfilename(
             filetypes=[('Text Files','.txt'), ('All Files', '.*')])
@@ -55,10 +58,13 @@ class SaveOn():
         pass
 
     def __newHandler(self):
-        if self.changed:
-            print('file changed.  Save?')
-        print('Opening new file');
-        self.filename = None
+        check = self.checkChanged()
+        if check == 'ok':
+            print('Opening new file');
+            self.filename = None
+            self.txt.edit_modified(False)
+        else:
+            print( 'Old data unchanged')
         pass
 
     def __saveHandler(self):
@@ -66,11 +72,12 @@ class SaveOn():
             self.__saveAsHandler()
             return
         print('Saving',self.filename)
+        self.txt.edit_modified(False)
         pass
     
     def __saveAsHandler(self):
         oldFileName = self.filename
-        self.filename = filedialog.asksaveasfilename(defaultextension='.sud',
+        self.filename = filedialog.asksaveasfilename(defaultextension='.txt',
             filetypes=[('Text Files','.txt'), ('All Files', '.*')])
         if self.filename == '':
             self.filename = oldFileName
@@ -83,7 +90,30 @@ class SaveOn():
         print('printing',self.filename)
         pass
 
-    def __SaveOnClosing(self, ev):
-        print('closing Save on,  Event',ev)
+    def __SaveOnClosing(self):
+        if not self.closing:
+            ret = self.checkChanged()
+            print('checkchanged returned',ret)
+            if ret != 'cancel':
+                print('closing Save on')
+                self.top.destroy()
+                pass
+            #self.closing = True
+        pass
+
+    def checkChanged(self):
+        """ ask the usere if s/he wants to save if the text is changed """
+        if self.txt.edit_modified():
+            self.msg = messagebox.askyesnocancel('Save Data?',
+                                              'Text is not saved.  Save it?')
+            if self.msg == None:
+                return 'cancel'
+            elif self.msg:
+                self.__saveHandler()
+            return 'ok'
+
+######################################################################
+# Main program
+######################################################################
         
 s= SaveOn()
