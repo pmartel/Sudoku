@@ -61,6 +61,7 @@ class Cell:
         
     """
     def isOk(self, d, i, p, s, S, v, V, W):
+        ''' This checks if the key entered is legitimate ''' 
         retVal = False
 ##        debug data
 ##        print( 'isOk called with:')
@@ -105,11 +106,29 @@ class Cell:
             return True
         return False
     
-##    def pressed(self):
-##        v = input('? ')
-##        vInt = int(v,self.base)
-##        if vInt >= 1 and vInt <= self.size :
-##            self.setv(vInt)
-##        else:
-##            print('Bad value. Should be digit between 1 and',self.size)
-##        pass
+    def check(self):
+        """ verify that the value of this cell is legal """
+        retval = True
+        v = self.getv()
+        if v == ' ' or v == '':
+            #a blank cell is OK
+            return True
+        for n in range(self.size):
+            cel = self.game.cell[n]
+            if cel == self : # self is ok
+                continue
+            cv = cel.getv()
+            if cv != v :
+                continue
+            #Same value. Check row, column and box
+            if self.row == cel.row:
+                return False
+            elif self.col == cel.col:
+                return False
+            elif self.box == cel.box:
+                return False
+            pass
+        return True
+
+
+        

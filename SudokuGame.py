@@ -80,6 +80,9 @@ class SudokuGame(Frame):
         self.undoButton = Button(tk,command = self.undo, text='Undo')
         self.can.create_window(xyMax+10,s+10,window=self.undoButton,
                                anchor=NW)       
+        self.checkButton = Button(tk,command = self.checkGame, text='Check')
+        self.can.create_window(xyMax+10,2*s+10,window=self.checkButton,
+                               anchor=NW)       
         #clear board
         #self.clear()
 
@@ -90,23 +93,72 @@ class SudokuGame(Frame):
     
     def __SaveOnClosing(self):
         ret = self.checkChanged()
-        print('checkchanged returned',ret)
+        print('checkChanged() returned',ret)
         if ret != 'cancel':
-            print('closing Save on')
+            print('closing Sudoku')
             self.top.destroy()
         pass
 
     def checkChanged(self):
-        """ ask the usere if s/he wants to save if the text is changed """
+        """ ask the user if s/he wants to save if the game has changed """
         if len(self.undoStack):
             self.msg = messagebox.askyesnocancel('Save Data?',
-                                              'Text is not saved.  Save it?')
+                                              'Game is not saved.  Save it?')
             if self.msg == None:
                 return 'cancel'
             elif self.msg == 'yes':
                 self.save()
-            return 'ok'
+                return 'yes'
+            else:
+                return 'no'
         
+    def checkGame(self):
+        ''' see if there are any duplicate digits '''
+        gameOk = True
+        full = 0
+        for k in range(self.numCells):
+            cel = self.cell[k]
+            v = cel.getv()
+            if v == ' ' or v == '': # a blank is ok
+                continue
+            full +=1
+            for n in range(k+1,self.numCells):
+                #print('cells',n,k)
+                #all cells below k have been checked
+                nCel = self.cell[n]
+                nV = nCel.getv()
+                if v != nV:
+                    continue
+                # same digit
+                #print( 'same digit in cells {0}, {1}'.format(k,n))
+                if cel.row == nCel.row:
+                    gameOk = False
+                    break
+                elif cel.col == nCel.col:
+                    gameOk = False
+                    break
+                elif cel.box == nCel.box:
+                    gameOk = False
+                    break
+                pass #inner loop 
+            if not gameOk :
+                break
+            pass
+        
+        #display info
+        if gameOk :
+            print('game is ok')
+            if full == self.numCells:
+                print("Congratulations! You win!!");
+        else:
+            print('Duplicate digits in')
+            print('idx\trow\tcol\tbox\tval')
+            print('{0}\t{1}\t{2}\t{3}\t{4}'.format(k,cel.row,cel.col,
+                                                   cel.box,v))
+            print('{0}\t{1}\t{2}\t{3}\t{4}'.format(n,nCel.row,nCel.col,
+                                                   nCel.box,nV))
+                
+
     # load and store to files
     def load(self, fileName = []):
         print('SudokuGame.load({0})'.format(fileName))
@@ -190,9 +242,6 @@ class SudokuGame(Frame):
             c = self.cell[n]
             c.setv(c.origVal)
         self.undoStack.clear() # don't undo past a restart point
-        pass
-
-    def check(self):
         pass
 
     def undo(self): # was called backup
