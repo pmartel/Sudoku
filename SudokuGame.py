@@ -84,11 +84,29 @@ class SudokuGame(Frame):
         #self.clear()
 
         #set up exit actions
-##        import atexit
-##        atexit.register(self.__exit__)
+        self.top = self.can.winfo_toplevel()
+        self.top.protocol("WM_DELETE_WINDOW", self.__SaveOnClosing)
+        pass
+    
+    def __SaveOnClosing(self):
+        ret = self.checkChanged()
+        print('checkchanged returned',ret)
+        if ret != 'cancel':
+            print('closing Save on')
+            self.top.destroy()
         pass
 
-    
+    def checkChanged(self):
+        """ ask the usere if s/he wants to save if the text is changed """
+        if len(self.undoStack):
+            self.msg = messagebox.askyesnocancel('Save Data?',
+                                              'Text is not saved.  Save it?')
+            if self.msg == None:
+                return 'cancel'
+            elif self.msg == 'yes':
+                self.save()
+            return 'ok'
+        
     # load and store to files
     def load(self, fileName = []):
         print('SudokuGame.load({0})'.format(fileName))
