@@ -8,6 +8,7 @@ class Cell:
     val = ''
     origVal = ''
     oldchar = ''
+    idx = -1
     
     def __init__(self, r, c, box, can, game):
         
@@ -34,7 +35,7 @@ class Cell:
         top = game.winfo_toplevel()
         okCmd = top.register(self.isOk)
         self.ent = Entry(can, justify=CENTER, width=1, font=('Arial',16),
-                    textvariable=sv, validate='key',
+                    textvariable=sv, validate='focusin',
                     validatecommand=(okCmd,'%d','%i','%P','%s','%S',
                                      '%v','%V','%W') )
         self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,
@@ -60,22 +61,24 @@ class Cell:
     Use them all for now, print them for debug
         
     """
-    def isOk(self, d, i, p, s, S, v, V, W):
+    def isOk(self, d, i, P, s, S, v, V, W):
         ''' This checks if the key entered is legitimate ''' 
         retVal = False
-##        debug data
+        # debug data
 ##        print( 'isOk called with:')
 ##        print( 'self',self)
 ##        print( '  %d',d)
 ##        print( '  %i',i)
-##        print( '  %p<{0}>'.format(p))
+##        print( '  %P<{0}>'.format(P))
 ##        print( '  %s<{0}>'.format(s))
 ##        print( '  %S<{0}>'.format(S))
 ##        print( '  %v',v)
 ##        print( '  %V',V)
 ##        print( '  %W',W)
-##        print( 'entry validate',self.ent['validate'])
+##        print( 'entry[',self.idx,'] validate',self.ent['validate'])
 
+        #print('Cell',self.idx,'has focus')
+        self.game.focusIdx = self.idx
         if V == 'key':
             if len(S)>1:
                 print('S is too long')
@@ -85,7 +88,6 @@ class Cell:
                     old = self.getv()
                     self.game.undoStack.append((self.idx, old))
                     self.setv(S)
-       
         #whether the new value is good or bad, don't let it be changed
         # by the routine that called us.
         return False
