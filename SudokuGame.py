@@ -9,7 +9,7 @@ from BoxPrint import BoxPrint
 class SudokuGame(Frame):
     cell=[]
     undoStack = []
-    
+    focusIdx = []
     # dictionary holding valid characters for a given size game
     digits = { 4: (' ','1','2','3','4')}
     digits[9] = (' ','1','2','3','4','5','6','7','8','9')
@@ -82,6 +82,9 @@ class SudokuGame(Frame):
                                anchor=NW)       
         self.checkButton = Button(tk,command = self.checkGame, text='Check')
         self.can.create_window(xyMax+10,2*s+10,window=self.checkButton,
+                               anchor=NW)       
+        self.optButton = Button(tk,command = self.printOptions, text='Options?')
+        self.can.create_window(xyMax+10,3*s+10,window=self.optButton,
                                anchor=NW)       
         #clear board
         #self.clear()
@@ -237,6 +240,12 @@ class SudokuGame(Frame):
         self.undoStack.clear() # don't undo past a clear point
         pass
 
+    def printOptions(self):
+        active = self.focusIdx
+        l = self.digits[self.nSq]
+        l = list(l[1:len(l)])
+        print('Options for cell {0}: {1}'.format(active,l))
+              
     def restart(self):
         for n in range(self.numCells):
             c = self.cell[n]
@@ -247,7 +256,8 @@ class SudokuGame(Frame):
     def undo(self): # was called backup
         if len(self.undoStack) > 0:
             uData = self.undoStack.pop()
-            print('undo',uData)
+            idx = uData[0]
+            print('undo cell',idx,'from',self.cell[idx].getv(),'to',uData[1])
             self.cell[uData[0]].setv(uData[1])
         else:              
             print('undo stack empty')
@@ -275,7 +285,19 @@ class SudokuGame(Frame):
     def quit(self):
         print( 'quitting')
 
+    #auxiliary functions
+    def rc2idx(self,r,c):
+        """ takes a row and column number of a cell and returns its index """
+        return r + c * self.nSq
 
+    def rowList(self, idx):
+        """ returns a list of indices of cells in the same row """
+
+    def colList(self, idx):
+        """ returns a list of indices of cells in the same column """
+
+    def boxList(self, idx):
+        """ returns a list of indices of cells in the same box """
 
 ###########################################################
 # main routine
