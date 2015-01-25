@@ -5,6 +5,7 @@ from tkinter import *
 from Cell import *
 from SudokuMenu import *
 from BoxPrint import BoxPrint
+#from time import *
 
 class SudokuGame(Frame):
     cell=[]
@@ -85,6 +86,9 @@ class SudokuGame(Frame):
                                anchor=NW)       
         self.optButton = Button(tk,command = self.printOptions, text='Options?')
         self.can.create_window(xyMax+10,3*s+10,window=self.optButton,
+                               anchor=NW)       
+        self.solveButton = Button(tk,command = self.solve, text='Solve')
+        self.can.create_window(xyMax+10,4*s+10,window=self.solveButton,
                                anchor=NW)       
         #clear board
         #self.clear()
@@ -242,8 +246,7 @@ class SudokuGame(Frame):
 
     def printOptions(self):
         active = self.focusIdx
-        l = self.digits[self.nSq]
-        l = list(l[1:len(l)])
+        l = self.findOptions(active)
         print('Options for cell {0}: {1}'.format(active,l))
               
     def restart(self):
@@ -262,7 +265,6 @@ class SudokuGame(Frame):
         else:              
             print('undo stack empty')
         pass
-
 
     
     def print(self):
@@ -285,20 +287,100 @@ class SudokuGame(Frame):
     def quit(self):
         print( 'quitting')
 
+    # the solver code
+    def solve(self):
+        passes = 0
+        blanks = 1 # fake starting the loop
+        while blanks > 0:
+            blanks = self.countEmpty()
+            passes +=1
+            print( 'Solving puzzle. Pass {0}.  Initially {1} empty cells.'
+                   .format(passes,blanks))
+            # check any cells that have only one option
+            for n in range(self.numCells):
+                if self.cell[n].getv() !=' ':
+                    continue # skip already filled cells
+                t = self.findOptions(n)
+                if len(t) == 1:
+                    print('Cell',n,'can only be',t[0])
+                    #delay(1)
+                    self.cell[n].setv(t[0])
+        
+    # solver related functions
+    def findOptions(self, idx):
+        ''' return a list of possible values for cell[idx] '''
+        l = self.digits[self.nSq]
+        l = list(l[1:len(l)])
+        rL = self.rowList(idx)
+        rL.remove(idx) # leave active cell's value (if any) on list
+        for n in rL:
+            v = self.cell[n].getv()
+            if v in l:
+                l.remove(v)
+
+        # for the col of the active cell
+        cL = self.colList(idx)
+        cL.remove(idx) # leave active cell's value (if any) on list
+        for n in cL:
+            v = self.cell[n].getv()
+            if v in l:
+                l.remove(v)
+
+        # for the box of the active cell
+        bL = self.boxList(idx)
+        bL.remove(idx) # leave active cell's value (if any) on list
+        for n in bL:
+            v = self.cell[n].getv()
+            if v in l:
+                l.remove(v)
+        return l
+    
     #auxiliary functions
     def rc2idx(self,r,c):
         """ takes a row and column number of a cell and returns its index """
-        return r + c * self.nSq
+        return c + r * self.nSq
 
     def rowList(self, idx):
-        """ returns a list of indices of cells in the same row """
+        """ returns a list of indices of cells in the same row as idx """
+        rL = []
+        r = self.cell[idx].row
+        for c in range(self.nSq):
+            n = self.rc2idx(r,c)
+            rL.append(n)
+        return rL
+            
 
     def colList(self, idx):
-        """ returns a list of indices of cells in the same column """
+        """ returns a list of indices of cells in the same column as idx """
+        cL = []
+        c = self.cell[idx].col
+        for r in range(self.nSq):
+            n = self.rc2idx(r,c)
+            cL.append(n)
+        return cL
 
     def boxList(self, idx):
-        """ returns a list of indices of cells in the same box """
+        """ returns a list of indices of cells in the same box as idx """
+        bL = []
+        r = self.cell[idx].row
+        c = self.cell[idx].col
+        # find lower limit r, c of box
+        r = (r // self.n) * self.n
+        c = (c // self.n) * self.n
+        for r1 in range( r,r+self.n):
+            for c1 in range(c,c+self.n):
+                n = self.rc2idx(r1,c1)
+                bL.append(n)
+        return bL
 
+    def countEmpty(self):
+        count = 0
+        for n in range(self.numCells):
+            if self.cell[n].getv() == ' ':
+                count += 1
+        return count
+    
+            
 ###########################################################
 # main routine
 ###########################################################
