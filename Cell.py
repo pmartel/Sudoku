@@ -98,7 +98,7 @@ class Cell:
     def getv(self):
         return self.ent.get()
 
-    def setv(self,v):  # note: just set() overloads the builtin class set
+    def setv(self,v):  # note: just set() overloads the builtin class "set"
 ##        print("in setv for cell[{0}] set '{1}'".format(self.idx,v))
         if v in self.digits:
             e = self.ent # the Entry
