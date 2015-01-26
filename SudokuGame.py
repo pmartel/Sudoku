@@ -5,7 +5,8 @@ from tkinter import *
 from Cell import *
 from SudokuMenu import *
 from BoxPrint import BoxPrint
-#from time import *
+
+import time
 
 class SudokuGame(Frame):
     cell=[]
@@ -245,6 +246,7 @@ class SudokuGame(Frame):
         pass
 
     def printOptions(self):
+        self.can.update()
         active = self.focusIdx
         l = self.findOptions(active)
         print('Options for cell {0}: {1}'.format(active,l))
@@ -291,22 +293,36 @@ class SudokuGame(Frame):
     def solve(self):
         passes = 0
         blanks = 1 # fake starting the loop
+        oldBlanks = -1
         while blanks > 0:
             blanks = self.countEmpty()
             passes +=1
             print( 'Solving puzzle. Pass {0}.  Initially {1} empty cells.'
                    .format(passes,blanks))
-            # check any cells that have only one option
+            print('Test 1 - cells with only one option')
             for n in range(self.numCells):
                 if self.cell[n].getv() !=' ':
                     continue # skip already filled cells
                 t = self.findOptions(n)
                 if len(t) == 1:
                     print('Cell',n,'can only be',t[0])
-                    #delay(1)
                     self.cell[n].setv(t[0])
-        
-    # solver related functions
+                    self.can.update()
+                    time.sleep(.25)
+            print( 'Test 2 - by digits check for only one digit per row');
+            time.sleep(.5)
+            if oldBlanks == blanks:
+                break
+            else:
+                oldBlanks = blanks
+
+        if blanks == 0:
+            print( 'Sudoku solved')
+        else:
+            print('Sudoku solver stuck')
+
+
+# solver related functions
     def findOptions(self, idx):
         ''' return a list of possible values for cell[idx] '''
         l = self.digits[self.nSq]
@@ -333,6 +349,7 @@ class SudokuGame(Frame):
             v = self.cell[n].getv()
             if v in l:
                 l.remove(v)
+        self.cell[idx].optList = l
         return l
     
     #auxiliary functions
@@ -389,12 +406,13 @@ root = Tk()
 
 # start the game
 game = SudokuGame(root)
-#game.mainloop()
+
 # for debug
 c0 = game.cell[0]
 c10 =game.cell[10]
 c52 =game.cell[52]
 
+game.mainloop()
 
 
     
