@@ -15,10 +15,10 @@ class Cell:
         self.row = r
         self.col = c
         self.box = box
-        self.idx = r * game.nSq + c
+        self.idx = r * game.nDigits + c
         self.tk = can
         self.game = game # to reference things at the game level
-        self.size=game.nSq
+        self.size=game.nDigits
         
         if self.size == 16:
             self.base = 16

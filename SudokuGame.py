@@ -30,9 +30,9 @@ class SudokuGame(Frame):
             a kid. """
         # things related to the number of cells
         self.n = n
-        self.nSq = n * n
-        self.numCells = self.nSq * self.nSq
-        size = self.boxSize * (self.nSq +1)
+        self.nDigits = n * n
+        self.numCells = self.nDigits * self.nDigits
+        size = self.boxSize * (self.nDigits +1)
         self.size = size
 
         self.gString = '{0}x{1}'.format(size+self.extraWidth,size)
@@ -44,13 +44,13 @@ class SudokuGame(Frame):
         super(SudokuGame,self).__init__(tk)
 
         # set up the cells. Everything is on a canvas
-        self.can = Canvas(tk, height=self.nSq*self.boxSize+self.yOff,
-                          width=self.nSq*self.boxSize+self.xOff+
+        self.can = Canvas(tk, height=self.nDigits*self.boxSize+self.yOff,
+                          width=self.nDigits*self.boxSize+self.xOff+
                           self.extraWidth, bg='light gray')
         self.can.grid(row=1,column=1)
 
         #draw outline
-        for x in range(0,self.nSq+1):
+        for x in range(0,self.nDigits+1):
             if x % 3 == 0:
                 wid = 3
             else:
@@ -66,7 +66,7 @@ class SudokuGame(Frame):
         #generate the cells.  Each cell will have a entry widget attached
         # to the canvas
         for k in range(self.numCells):
-            ( r, c) = divmod(k, self.nSq)
+            ( r, c) = divmod(k, self.nDigits)
             rr = r // self.n
             cc = c // self.n
             b = rr * self.n + cc
@@ -182,9 +182,9 @@ class SudokuGame(Frame):
         f.close()
         # check the number of rows is ok
         n2 = len(boxes)
-        if n2 != self.nSq:
+        if n2 != self.nDigits:
             print( "Error, File <{0}> is for a size".format(filename),
-                   n2, 'board', 'current board is', self.nSq)
+                   n2, 'board', 'current board is', self.nDigits)
             return
         
         # check length of rows
@@ -218,10 +218,10 @@ class SudokuGame(Frame):
         except FileNotFoundError:
             print("Error, can't write to file <{0}>".format(fileName))
             return
-        for row in range(self.nSq):
+        for row in range(self.nDigits):
             rowline=''
-            for col in range(self.nSq):
-                n = row * self.nSq + col
+            for col in range(self.nDigits):
+                n = row * self.nDigits + col
                 c = self.cell[n]
                 v = c.getv()
                 if len(v) > 1:
@@ -272,10 +272,10 @@ class SudokuGame(Frame):
     def print(self):
         """ prettyprint the board """
         data = []
-        for row in range(self.nSq):
+        for row in range(self.nDigits):
             rowline=''
-            for col in range(self.nSq):
-                n = row * self.nSq + col
+            for col in range(self.nDigits):
+                n = row * self.nDigits + col
                 c = self.cell[n]
                 v = c.getv()
                 if len(v) > 1:
@@ -310,6 +310,15 @@ class SudokuGame(Frame):
                     self.can.update()
                     time.sleep(.25)
             print( 'Test 2 - by digits check for only one digit per row');
+            digList = self.digits[self.nDigits]
+            digList = list(digList[1:len(digList)])
+            # make sure that the options lists are up to date
+            for n in range(self.numCells):
+                self.findOptions(n)
+                
+            for d in digList:
+                for r in range(self.nDigits):
+                    pass
             time.sleep(.5)
             if oldBlanks == blanks:
                 break
@@ -325,7 +334,7 @@ class SudokuGame(Frame):
 # solver related functions
     def findOptions(self, idx):
         ''' return a list of possible values for cell[idx] '''
-        l = self.digits[self.nSq]
+        l = self.digits[self.nDigits]
         l = list(l[1:len(l)])
         rL = self.rowList(idx)
         rL.remove(idx) # leave active cell's value (if any) on list
@@ -355,13 +364,13 @@ class SudokuGame(Frame):
     #auxiliary functions
     def rc2idx(self,r,c):
         """ takes a row and column number of a cell and returns its index """
-        return c + r * self.nSq
+        return c + r * self.nDigits
 
     def rowList(self, idx):
         """ returns a list of indices of cells in the same row as idx """
         rL = []
         r = self.cell[idx].row
-        for c in range(self.nSq):
+        for c in range(self.nDigits):
             n = self.rc2idx(r,c)
             rL.append(n)
         return rL
@@ -371,7 +380,7 @@ class SudokuGame(Frame):
         """ returns a list of indices of cells in the same column as idx """
         cL = []
         c = self.cell[idx].col
-        for r in range(self.nSq):
+        for r in range(self.nDigits):
             n = self.rc2idx(r,c)
             cL.append(n)
         return cL
