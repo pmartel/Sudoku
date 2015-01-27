@@ -248,7 +248,7 @@ class SudokuGame(Frame):
     def printOptions(self):
         self.can.update()
         active = self.focusIdx
-        l = self.findOptions(active)
+        l = self.findOptions(active,0)
         print('Options for cell {0}: {1}'.format(active,l))
               
     def restart(self):
@@ -291,11 +291,15 @@ class SudokuGame(Frame):
 
     # the solver code
     def solve(self):
+        digList = self.digits[self.nDigits]
+        digList = list(digList[1:len(digList)])
         passes = 0
-        blanks = 1 # fake starting the loop
+        blanks = 1 # starting the loop
         oldBlanks = -1
         while blanks > 0:
             blanks = self.countEmpty()
+            if blanks == 0:
+                break
             passes +=1
             print( 'Solving puzzle. Pass {0}.  Initially {1} empty cells.'
                    .format(passes,blanks))
@@ -303,22 +307,58 @@ class SudokuGame(Frame):
             for n in range(self.numCells):
                 if self.cell[n].getv() !=' ':
                     continue # skip already filled cells
-                t = self.findOptions(n)
+                t = self.findOptions(n,0)
                 if len(t) == 1:
                     print('Cell',n,'can only be',t[0])
                     self.cell[n].setv(t[0])
                     self.can.update()
                     time.sleep(.25)
+            blanks = self.countEmpty()
+            if blanks == 0:
+                break
             print( 'Test 2 - by digits check for only one digit per row');
-            digList = self.digits[self.nDigits]
-            digList = list(digList[1:len(digList)])
             # make sure that the options lists are up to date
             for n in range(self.numCells):
-                self.findOptions(n)
+                self.findOptions(n,1)
                 
             for d in digList:
                 for r in range(self.nDigits):
-                    pass
+                    rowDig = []
+                    for c in  range(self.nDigits):
+                        idx = self.rc2idx(r,c)
+                        if d in self.cell[idx].optList:
+                            rowDig.append(idx)
+                        pass # for c
+                    if len(rowDig) == 1:
+                        if self.cell[rowDig[0]].getv() == ' ':
+                            print( 'only',d,'in row',r,'is index',rowDig[0])
+                            self.cell[rowDig[0]].setv(d)
+                            self.can.update()
+                            time.sleep(.25)
+                    pass # for r
+            print( 'Test 3 - by digits check for only one digit per col');
+            # make sure that the options lists are up to date
+            for n in range(self.numCells):
+                self.findOptions(n,1)
+                
+            for d in digList:
+                for c in range(self.nDigits):
+                    colDig = []
+                    for r in  range(self.nDigits):
+                        idx = self.rc2idx(r,c)
+                        if d in self.cell[idx].optList:
+                            colDig.append(idx)
+                        pass # for r
+                    if len(colDig) == 1:
+                        if self.cell[colDig[0]].getv() == ' ':
+                            print( 'only',d,'in col',c,'is index',colDig[0])
+                            self.cell[colDig[0]].setv(d)
+                            self.can.update()
+                            time.sleep(.25)
+                    pass # for c
+            blanks = self.countEmpty()
+            if blanks == 0:
+                break
             time.sleep(.5)
             if oldBlanks == blanks:
                 break
@@ -332,9 +372,17 @@ class SudokuGame(Frame):
 
 
 # solver related functions
-    def findOptions(self, idx):
-        ''' return a list of possible values for cell[idx] '''
+    def findOptions(self, idx, flag):
+        ''' return a list of possible values for cell[idx]. if flag is 1,
+remove a filled cell only has it's value'''
+        if flag == 1:
+            v = self.cell[idx].getv()
+            if v != ' ':
+                self.cell[idx].optList=[v]
+                return [v]
+            
         l = self.digits[self.nDigits]
+        
         l = list(l[1:len(l)])
         rL = self.rowList(idx)
         rL.remove(idx) # leave active cell's value (if any) on list
@@ -421,7 +469,7 @@ c0 = game.cell[0]
 c10 =game.cell[10]
 c52 =game.cell[52]
 
-game.mainloop()
+#game.mainloop()
 
 
     
