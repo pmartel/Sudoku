@@ -165,7 +165,7 @@ class SudokuGame(Frame):
                                                    cel.box,v))
             print('{0}\t{1}\t{2}\t{3}\t{4}'.format(n,nCel.row,nCel.col,
                                                    nCel.box,nV))
-                
+        return gameOk       
 
     # load and store to files
     def load(self, fileName = []):
@@ -294,9 +294,8 @@ class SudokuGame(Frame):
         digList = self.digits[self.nDigits]
         digList = list(digList[1:len(digList)])
         passes = 0
-        blanks = 1 # starting the loop
-        oldBlanks = -1
-        while blanks > 0:
+        oldBlanks = self.countEmpty()
+        while True:
             blanks = self.countEmpty()
             if blanks == 0:
                 break
@@ -313,10 +312,13 @@ class SudokuGame(Frame):
                     self.cell[n].setv(t[0])
                     self.can.update()
                     time.sleep(.25)
+            if not self.checkGame():
+                break
             blanks = self.countEmpty()
             if blanks == 0:
                 break
-            print( 'Test 2 - by digits check for only one digit per row');
+            print(
+                'Test 2 - by digits check for only one cell in a row can be it');
             # make sure that the options lists are up to date
             for n in range(self.numCells):
                 self.findOptions(n,1)
@@ -336,7 +338,14 @@ class SudokuGame(Frame):
                             self.can.update()
                             time.sleep(.25)
                     pass # for r
-            print( 'Test 3 - by digits check for only one digit per col');
+            if not self.checkGame():
+                break
+            blanks = self.countEmpty()
+            if blanks == 0:
+                break
+            print(
+                'Test 2 - by digits check for only one cell in a col can be it');
+ 
             # make sure that the options lists are up to date
             for n in range(self.numCells):
                 self.findOptions(n,1)
@@ -356,15 +365,50 @@ class SudokuGame(Frame):
                             self.can.update()
                             time.sleep(.25)
                     pass # for c
+            if not self.checkGame():
+                break
             blanks = self.countEmpty()
             if blanks == 0:
                 break
-            time.sleep(.5)
-            if oldBlanks == blanks:
+            print(
+                'Test 3 - by digits check for only one cell in a box can be it')
+            # make sure that the options lists are up to date
+            for n in range(self.numCells):
+                self.findOptions(n,1)
+                
+            for d in digList:
+                for b in range(self.nDigits):
+                    boxDig=[]
+                    # find a row, col in b, get the index
+                    c = (b // 3)* 3
+                    r = (b * 3) % 9
+                    idx = self.rc2idx(r,c)
+                    bList = self.boxList(idx)
+                    #print('b',b,'list',bList)
+                    for idx in bList:
+                        if d in self.cell[idx].optList:
+                            boxDig.append(idx)
+                            pass # for idx
+                        if len(boxDig) == 1:
+                            if self.cell[boxDig[0]].getv() == ' ':
+                                print( 'only',d,'in box',b,'is index',boxDig[0])
+                                self.cell[boxDig[0]].setv(d)
+                                self.can.update()
+                                time.sleep(.25)
+                        
+                    pass # for b
+            
+            if not self.checkGame():
+                break
+            # check if we're done or stuck
+            blanks = self.countEmpty()
+            if blanks == 0:
+                break
+            elif oldBlanks == blanks:
                 break
             else:
                 oldBlanks = blanks
-
+            pass # end of while loop
         if blanks == 0:
             print( 'Sudoku solved')
         else:
