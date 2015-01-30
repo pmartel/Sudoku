@@ -306,12 +306,12 @@ class SudokuGame(Frame):
             for n in range(self.numCells):
                 if self.cell[n].getv() !=' ':
                     continue # skip already filled cells
-                t = self.findOptions(n,0)
+                t = self.findOptions(n,1)
                 if len(t) == 1:
                     print('Cell',n,'can only be',t[0])
                     self.cell[n].setv(t[0])
                     self.can.update()
-                    time.sleep(.25)
+                    time.sleep(.1)
             if not self.checkGame():
                 break
             blanks = self.countEmpty()
@@ -319,12 +319,11 @@ class SudokuGame(Frame):
                 break
             print(
                 'Test 2 - by digits check for only one cell in a row can be it');
-            # make sure that the options lists are up to date
-            for n in range(self.numCells):
-                self.findOptions(n,1)
-                
             for d in digList:
-                for r in range(self.nDigits):
+                # make sure that the options lists are up to date
+                for n in range(self.numCells):
+                    self.findOptions(n,1)
+                for r in range(self.nDigits): # number of digits == cells in row
                     rowDig = []
                     for c in  range(self.nDigits):
                         idx = self.rc2idx(r,c)
@@ -336,7 +335,7 @@ class SudokuGame(Frame):
                             print( 'only',d,'in row',r,'is index',rowDig[0])
                             self.cell[rowDig[0]].setv(d)
                             self.can.update()
-                            time.sleep(.25)
+                            time.sleep(.1)
                     pass # for r
             if not self.checkGame():
                 break
@@ -345,13 +344,11 @@ class SudokuGame(Frame):
                 break
             print(
                 'Test 2 - by digits check for only one cell in a col can be it');
- 
-            # make sure that the options lists are up to date
-            for n in range(self.numCells):
-                self.findOptions(n,1)
-                
             for d in digList:
-                for c in range(self.nDigits):
+                # make sure that the options lists are up to date
+                for n in range(self.numCells):
+                    self.findOptions(n,1)
+                for c in range(self.nDigits): # number of digits == cells in col
                     colDig = []
                     for r in  range(self.nDigits):
                         idx = self.rc2idx(r,c)
@@ -363,7 +360,7 @@ class SudokuGame(Frame):
                             print( 'only',d,'in col',c,'is index',colDig[0])
                             self.cell[colDig[0]].setv(d)
                             self.can.update()
-                            time.sleep(.25)
+                            time.sleep(.1)
                     pass # for c
             if not self.checkGame():
                 break
@@ -372,31 +369,34 @@ class SudokuGame(Frame):
                 break
             print(
                 'Test 3 - by digits check for only one cell in a box can be it')
-            # make sure that the options lists are up to date
-            for n in range(self.numCells):
-                self.findOptions(n,1)
-                
             for d in digList:
-                for b in range(self.nDigits):
-                    boxDig=[]
+                for b in range(self.nDigits): # number of digits == cells in box
+                    # make sure that the options lists are up to date
+                    for n in range(self.numCells):
+                        self.findOptions(n,1)
                     # find a row, col in b, get the index
-                    c = (b // 3)* 3
-                    r = (b * 3) % 9
+                    r = (b // 3)* 3
+                    c = (b * 3) % 9
                     idx = self.rc2idx(r,c)
                     bList = self.boxList(idx)
+                    boxDig=[]
                     #print('b',b,'list',bList)
                     for idx in bList:
+                        c = self.cell
+                        #print(idx,c[idx].optList, '1' in c[idx].optList)
                         if d in self.cell[idx].optList:
                             boxDig.append(idx)
-                            pass # for idx
-                        if len(boxDig) == 1:
-                            if self.cell[boxDig[0]].getv() == ' ':
-                                print( 'only',d,'in box',b,'is index',boxDig[0])
-                                self.cell[boxDig[0]].setv(d)
-                                self.can.update()
-                                time.sleep(.25)
-                        
+                        pass # for idx
+                    # this was over too far so it got executed for every idx :(
+                    if len(boxDig) == 1:
+                        if self.cell[boxDig[0]].getv() == ' ':
+                            print( 'only',d,'in box',b,'is index',
+                                   boxDig[0])
+                            self.cell[boxDig[0]].setv(d)
+                            self.can.update()
+                            time.sleep(.1)
                     pass # for b
+                pass #for d
             
             if not self.checkGame():
                 break
@@ -482,13 +482,17 @@ remove a filled cell only has it's value'''
         bL = []
         r = self.cell[idx].row
         c = self.cell[idx].col
+##        print('boxList({0}) r{1} c{2} b{3}'.format
+##              (idx,r,c,self.cell[idx].box))
         # find lower limit r, c of box
         r = (r // self.n) * self.n
         c = (c // self.n) * self.n
+##        print('new rc',r,c)
         for r1 in range( r,r+self.n):
             for c1 in range(c,c+self.n):
                 n = self.rc2idx(r1,c1)
                 bL.append(n)
+##        print(bL)
         return bL
 
     def countEmpty(self):
