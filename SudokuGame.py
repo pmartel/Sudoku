@@ -309,7 +309,7 @@ class SudokuGame(Frame):
                 t = self.findOptions(n,1)
                 if len(t) == 1:
                     print('Cell',n,'can only be',t[0])
-                    self.cell[n].setv(t[0])
+                    self.cell[n].setvStack(t[0])
                     self.can.update()
                     time.sleep(.1)
             if not self.checkGame():
@@ -333,7 +333,7 @@ class SudokuGame(Frame):
                     if len(rowDig) == 1:
                         if self.cell[rowDig[0]].getv() == ' ':
                             print( 'only',d,'in row',r,'is index',rowDig[0])
-                            self.cell[rowDig[0]].setv(d)
+                            self.cell[rowDig[0]].setvStack(d)
                             self.can.update()
                             time.sleep(.1)
                     pass # for r
@@ -358,7 +358,7 @@ class SudokuGame(Frame):
                     if len(colDig) == 1:
                         if self.cell[colDig[0]].getv() == ' ':
                             print( 'only',d,'in col',c,'is index',colDig[0])
-                            self.cell[colDig[0]].setv(d)
+                            self.cell[colDig[0]].setvStack(d)
                             self.can.update()
                             time.sleep(.1)
                     pass # for c
@@ -392,7 +392,7 @@ class SudokuGame(Frame):
                         if self.cell[boxDig[0]].getv() == ' ':
                             print( 'only',d,'in box',b,'is index',
                                    boxDig[0])
-                            self.cell[boxDig[0]].setv(d)
+                            self.cell[boxDig[0]].setvStack(d)
                             self.can.update()
                             time.sleep(.1)
                     pass # for b

@@ -87,10 +87,8 @@ class Cell:
             else:
                 if S in self.digits:
                     # S is a good new value, save the old value, jam new one in
-                    old = self.getv()
-                    self.game.undoStack.append((self.idx, old))
-                    self.setv(S)
-        #whether the new value is good or bad, don't let it be changed
+                    self.setvStack(S)
+         #whether the new value is good or bad, don't let it be changed
         # by the routine that called us.
         return False
     
@@ -110,6 +108,11 @@ class Cell:
             return True
         return False
     
+    def setvStack(self, v):
+        old = self.getv()
+        self.game.undoStack.append((self.idx, old))
+        self.setv(v)
+        
     def check(self):
         """ verify that the value of this cell is legal """
         retval = True
