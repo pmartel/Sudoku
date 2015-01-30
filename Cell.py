@@ -5,6 +5,8 @@ class Cell:
     row = []
     col = []
     box = []
+    options = [] # list of possible digits if val == ' '
+    digits = [] # list of legitmate digits for isOk()
     val = ''
     origVal = ''
     oldchar = ''
