@@ -6,7 +6,8 @@ class Cell:
     col = []
     box = []
     options = [] # list of possible digits if val == ' '
-    digits = [] # list of legitmate digits for isOk()
+    # move this to game, don't carry all the extra baggage...
+    #digits = [] # list of legitmate digits for isOk()
     val = ''
     origVal = ''
     oldchar = ''
@@ -26,7 +27,7 @@ class Cell:
             self.base = 16
         else:
             self.base = 10
-        self.digits = self.game.digits[self.size]
+        #self.digits = self.game.digits[self.size]
 
         # set up Entry widget
         siz = game.boxSize
@@ -37,7 +38,7 @@ class Cell:
         top = game.winfo_toplevel()
         okCmd = top.register(self.isOk)
         self.ent = Entry(can, justify=CENTER, width=1, font=('Arial',16),
-                    textvariable=sv, validate='focusin',
+                    textvariable=sv, validate='all',
                     validatecommand=(okCmd,'%d','%i','%P','%s','%S',
                                      '%v','%V','%W') )
         self.w = can.create_window(c*siz+2*xo,r*siz+2*yo,anchor = NW,
@@ -78,14 +79,13 @@ class Cell:
 ##        print( '  %V',V)
 ##        print( '  %W',W)
 ##        print( 'entry[',self.idx,'] validate',self.ent['validate'])
-
-        #print('Cell',self.idx,'has focus')
+        #print('Cell',self.idx,'has focus.  Reason',V)            
         self.game.focusIdx = self.idx
         if V == 'key':
             if len(S)>1:
                 print('S is too long')
             else:
-                if S in self.digits:
+                if S in self.game.digits[self.size]:
                     # S is a good new value, save the old value, jam new one in
                     self.setvStack(S)
          #whether the new value is good or bad, don't let it be changed
@@ -100,7 +100,7 @@ class Cell:
 
     def setv(self,v):  # note: just set() overloads the builtin class "set"
 ##        print("in setv for cell[{0}] set '{1}'".format(self.idx,v))
-        if v in self.digits:
+        if v in self.game.digits[self.size]:
             e = self.ent # the Entry
             nam = e['text'] # the name of the StringVar
             e.setvar(nam,v)
