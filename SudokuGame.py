@@ -5,18 +5,22 @@ from tkinter import *
 from Cell import *
 from SudokuMenu import *
 from BoxPrint import BoxPrint
+# the sudoku module is getting kind of big.  Break out the guessing module
+from guessing import guessingSolve 
+
+#import auxil
 
 import time
 
 class SudokuGame(Frame):
     cell=[]
     undoStack = []
-    focusIdx = []
+    focusIdx = 0
     # dictionary holding valid characters for a given size game
     digits = { 4: (' ','1','2','3','4')}
     digits[9] = (' ','1','2','3','4','5','6','7','8','9')
     digits[16] = (' ','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F')
-    
+    digList = []
     #parameters
     boxSize = 50
     xOff = 3
@@ -34,6 +38,9 @@ class SudokuGame(Frame):
         self.numCells = self.nDigits * self.nDigits
         size = self.boxSize * (self.nDigits +1)
         self.size = size
+        #get a list of the 'legal' digits
+        digList = self.digits[self.nDigits]
+        self.digList = list(digList[1:len(digList)])
 
         self.gString = '{0}x{1}'.format(size+self.extraWidth,size)
 
@@ -90,6 +97,10 @@ class SudokuGame(Frame):
                                anchor=NW)       
         self.solveButton = Button(tk,command = self.solve, text='Solve')
         self.can.create_window(xyMax+10,4*s+10,window=self.solveButton,
+                               anchor=NW)       
+        self.guessButton = Button(tk,command = self.guessSolve, text=
+                                  'Solve with guessing')
+        self.can.create_window(xyMax+10,5*s+10,window=self.guessButton,
                                anchor=NW)       
         #clear board
         #self.clear()
@@ -248,6 +259,7 @@ class SudokuGame(Frame):
     def printOptions(self):
         self.can.update()
         active = self.focusIdx
+        print('active <{0}>'.format(active))
         l = self.findOptions(active,0)
         print('Options for cell {0}: {1}'.format(active,l))
               
@@ -291,8 +303,6 @@ class SudokuGame(Frame):
 
     # the solver code
     def solve(self):
-        digList = self.digits[self.nDigits]
-        digList = list(digList[1:len(digList)])
         passes = 0
         oldBlanks = self.countEmpty()
         while True:
@@ -319,7 +329,7 @@ class SudokuGame(Frame):
                 break
             print(
                 'Test 2 - by digits check for only one cell in a row can be it');
-            for d in digList:
+            for d in self.digList:
                 # make sure that the options lists are up to date
                 for n in range(self.numCells):
                     self.findOptions(n,1)
@@ -343,8 +353,8 @@ class SudokuGame(Frame):
             if blanks == 0:
                 break
             print(
-                'Test 2 - by digits check for only one cell in a col can be it');
-            for d in digList:
+                'Test 3 - by digits check for only one cell in a col can be it');
+            for d in self.digList:
                 # make sure that the options lists are up to date
                 for n in range(self.numCells):
                     self.findOptions(n,1)
@@ -369,7 +379,7 @@ class SudokuGame(Frame):
                 break
             print(
                 'Test 3 - by digits check for only one cell in a box can be it')
-            for d in digList:
+            for d in self.digList:
                 for b in range(self.nDigits): # number of digits == cells in box
                     # make sure that the options lists are up to date
                     for n in range(self.numCells):
@@ -414,11 +424,15 @@ class SudokuGame(Frame):
         else:
             print('Sudoku solver stuck')
 
+#link to external guessing solver code
+    def guessSolve(self):
+        guessingSolve(self)
+
 
 # solver related functions
     def findOptions(self, idx, flag):
         ''' return a list of possible values for cell[idx]. if flag is 1,
-remove a filled cell only has it's value'''
+ a filled cell only has it's value, otherwise other options show up '''
         if flag == 1:
             v = self.cell[idx].getv()
             if v != ' ':
@@ -513,7 +527,7 @@ root = Tk()
 game = SudokuGame(root)
 
 # for debug
-c0 = game.cell[0]
+c = game.cell
 c10 =game.cell[10]
 c52 =game.cell[52]
 
