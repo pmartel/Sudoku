@@ -1,14 +1,11 @@
 """ This file is a sudoku game.  Later I'll add a solver """
-# TO-DO: save game on close
 from tkinter import *
-#import tkmessagebox
 from Cell import *
 from SudokuMenu import *
 from BoxPrint import BoxPrint
 # the sudoku module is getting kind of big.  Break out the guessing module
 from guessing import guessingSolve 
 
-#import auxil
 
 import time
 
