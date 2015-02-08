@@ -4,8 +4,10 @@ from Cell import *
 from SudokuMenu import *
 from BoxPrint import BoxPrint
 # the sudoku module is getting kind of big.  Break out the guessing module
-from guessing import guessingSolve 
+#then solutions in general
+#from guessing import guessingSolve 
 
+from Solver import SudokuSolver
 
 import time
 
@@ -77,6 +79,8 @@ class SudokuGame(Frame):
             # this checks that r,c, and b are good
             #print(k,r,c,b)
             self.cell.append(Cell(r,c,b,self.can,self))
+        # add the solver
+        self.solver = SudokuSolver(self)
         # add a menu
         self.menu = SudokuMenu(self)
         #add buttons
@@ -95,8 +99,8 @@ class SudokuGame(Frame):
         self.solveButton = Button(tk,command = self.solve, text='Solve')
         self.can.create_window(xyMax+10,4*s+10,window=self.solveButton,
                                anchor=NW)       
-        self.guessButton = Button(tk,command = self.guessSolve, text=
-                                  'Solve with guessing')
+        self.guessButton = Button(tk,command = self.solver.guessingSolve,
+                                  text='Solve with guessing')
         self.can.create_window(xyMax+10,5*s+10,window=self.guessButton,
                                anchor=NW)       
         #clear board
