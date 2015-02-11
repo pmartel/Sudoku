@@ -96,7 +96,7 @@ class SudokuGame(Frame):
         self.optButton = Button(tk,command = self.printOptions, text='Options?')
         self.can.create_window(xyMax+10,3*s+10,window=self.optButton,
                                anchor=NW)       
-        self.solveButton = Button(tk,command = self.solve, text='Solve')
+        self.solveButton = Button(tk,command = self.solver.solve, text='Solve')
         self.can.create_window(xyMax+10,4*s+10,window=self.solveButton,
                                anchor=NW)       
         self.guessButton = Button(tk,command = self.solver.guessingSolve,
@@ -302,132 +302,10 @@ class SudokuGame(Frame):
     def quit(self):
         print( 'quitting')
 
-    # the solver code
-    def solve(self):
-        passes = 0
-        oldBlanks = self.countEmpty()
-        while True:
-            blanks = self.countEmpty()
-            if blanks == 0:
-                break
-            passes +=1
-            print( 'Solving puzzle. Pass {0}.  Initially {1} empty cells.'
-                   .format(passes,blanks))
-            print('Test 1 - cells with only one option')
-            for n in range(self.numCells):
-                if self.cell[n].getv() !=' ':
-                    continue # skip already filled cells
-                t = self.findOptions(n,1)
-                if len(t) == 1:
-                    print('Cell',n,'can only be',t[0])
-                    self.cell[n].setvStack(t[0])
-                    self.can.update()
-                    time.sleep(.1)
-            if not self.checkGame():
-                break
-            blanks = self.countEmpty()
-            if blanks == 0:
-                break
-            print(
-                'Test 2 - by digits check for only one cell in a row can be it');
-            for d in self.digList:
-                # make sure that the options lists are up to date
-                for n in range(self.numCells):
-                    self.findOptions(n,1)
-                for r in range(self.nDigits): # number of digits == cells in row
-                    rowDig = []
-                    for c in  range(self.nDigits):
-                        idx = self.rc2idx(r,c)
-                        if d in self.cell[idx].optList:
-                            rowDig.append(idx)
-                        pass # for c
-                    if len(rowDig) == 1:
-                        if self.cell[rowDig[0]].getv() == ' ':
-                            print( 'only',d,'in row',r,'is index',rowDig[0])
-                            self.cell[rowDig[0]].setvStack(d)
-                            self.can.update()
-                            time.sleep(.1)
-                    pass # for r
-            if not self.checkGame():
-                break
-            blanks = self.countEmpty()
-            if blanks == 0:
-                break
-            print(
-                'Test 3 - by digits check for only one cell in a col can be it');
-            for d in self.digList:
-                # make sure that the options lists are up to date
-                for n in range(self.numCells):
-                    self.findOptions(n,1)
-                for c in range(self.nDigits): # number of digits == cells in col
-                    colDig = []
-                    for r in  range(self.nDigits):
-                        idx = self.rc2idx(r,c)
-                        if d in self.cell[idx].optList:
-                            colDig.append(idx)
-                        pass # for r
-                    if len(colDig) == 1:
-                        if self.cell[colDig[0]].getv() == ' ':
-                            print( 'only',d,'in col',c,'is index',colDig[0])
-                            self.cell[colDig[0]].setvStack(d)
-                            self.can.update()
-                            time.sleep(.1)
-                    pass # for c
-            if not self.checkGame():
-                break
-            blanks = self.countEmpty()
-            if blanks == 0:
-                break
-            print(
-                'Test 3 - by digits check for only one cell in a box can be it')
-            for d in self.digList:
-                for b in range(self.nDigits): # number of digits == cells in box
-                    # make sure that the options lists are up to date
-                    for n in range(self.numCells):
-                        self.findOptions(n,1)
-                    # find a row, col in b, get the index
-                    r = (b // 3)* 3
-                    c = (b * 3) % 9
-                    idx = self.rc2idx(r,c)
-                    bList = self.boxList(idx)
-                    boxDig=[]
-                    #print('b',b,'list',bList)
-                    for idx in bList:
-                        c = self.cell
-                        #print(idx,c[idx].optList, '1' in c[idx].optList)
-                        if d in self.cell[idx].optList:
-                            boxDig.append(idx)
-                        pass # for idx
-                    # this was over too far so it got executed for every idx :(
-                    if len(boxDig) == 1:
-                        if self.cell[boxDig[0]].getv() == ' ':
-                            print( 'only',d,'in box',b,'is index',
-                                   boxDig[0])
-                            self.cell[boxDig[0]].setvStack(d)
-                            self.can.update()
-                            time.sleep(.1)
-                    pass # for b
-                pass #for d
-            
-            if not self.checkGame():
-                break
-            # check if we're done or stuck
-            blanks = self.countEmpty()
-            if blanks == 0:
-                break
-            elif oldBlanks == blanks:
-                break
-            else:
-                oldBlanks = blanks
-            pass # end of while loop
-        if blanks == 0:
-            print( 'Sudoku solved')
-        else:
-            print('Sudoku solver stuck')
 
-#link to external guessing solver code
-    def guessSolve(self):
-        guessingSolve(self)
+###link to external guessing solver code
+##    def guessSolve(self):
+##        guessingSolve(self)
 
 
 # solver related functions
