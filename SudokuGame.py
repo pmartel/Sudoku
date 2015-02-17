@@ -9,7 +9,6 @@ from BoxPrint import BoxPrint
 
 from Solver import SudokuSolver
 
-import time
 
 class SudokuGame(Frame):
     cell=[]
@@ -302,99 +301,6 @@ class SudokuGame(Frame):
     def quit(self):
         print( 'quitting')
 
-
-###link to external guessing solver code
-##    def guessSolve(self):
-##        guessingSolve(self)
-
-
-# solver related functions
-    def findOptions(self, idx, flag):
-        ''' return a list of possible values for cell[idx]. if flag is 1,
- a filled cell only has it's value, otherwise other options show up '''
-        if flag == 1:
-            v = self.cell[idx].getv()
-            if v != ' ':
-                self.cell[idx].optList=[v]
-                return [v]
-            
-        l = self.digits[self.nDigits]
-        
-        l = list(l[1:len(l)])
-        rL = self.rowList(idx)
-        rL.remove(idx) # leave active cell's value (if any) on list
-        for n in rL:
-            v = self.cell[n].getv()
-            if v in l:
-                l.remove(v)
-
-        # for the col of the active cell
-        cL = self.colList(idx)
-        cL.remove(idx) # leave active cell's value (if any) on list
-        for n in cL:
-            v = self.cell[n].getv()
-            if v in l:
-                l.remove(v)
-
-        # for the box of the active cell
-        bL = self.boxList(idx)
-        bL.remove(idx) # leave active cell's value (if any) on list
-        for n in bL:
-            v = self.cell[n].getv()
-            if v in l:
-                l.remove(v)
-        self.cell[idx].optList = l
-        return l
-    
-    #auxiliary functions
-    def rc2idx(self,r,c):
-        """ takes a row and column number of a cell and returns its index """
-        return c + r * self.nDigits
-
-    def rowList(self, idx):
-        """ returns a list of indices of cells in the same row as idx """
-        rL = []
-        r = self.cell[idx].row
-        for c in range(self.nDigits):
-            n = self.rc2idx(r,c)
-            rL.append(n)
-        return rL
-            
-
-    def colList(self, idx):
-        """ returns a list of indices of cells in the same column as idx """
-        cL = []
-        c = self.cell[idx].col
-        for r in range(self.nDigits):
-            n = self.rc2idx(r,c)
-            cL.append(n)
-        return cL
-
-    def boxList(self, idx):
-        """ returns a list of indices of cells in the same box as idx """
-        bL = []
-        r = self.cell[idx].row
-        c = self.cell[idx].col
-##        print('boxList({0}) r{1} c{2} b{3}'.format
-##              (idx,r,c,self.cell[idx].box))
-        # find lower limit r, c of box
-        r = (r // self.n) * self.n
-        c = (c // self.n) * self.n
-##        print('new rc',r,c)
-        for r1 in range( r,r+self.n):
-            for c1 in range(c,c+self.n):
-                n = self.rc2idx(r1,c1)
-                bL.append(n)
-##        print(bL)
-        return bL
-
-    def countEmpty(self):
-        count = 0
-        for n in range(self.numCells):
-            if self.cell[n].getv() == ' ':
-                count += 1
-        return count
-    
             
 ###########################################################
 # main routine
