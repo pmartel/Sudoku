@@ -274,10 +274,13 @@ class SudokuGame(Frame):
         if len(self.undoStack) > 0:
             uData = self.undoStack.pop()
             idx = uData[0]
-            print('undo cell',idx,'from',self.cell[idx].getv(),'to',uData[1])
+            print('undo cell',idx,'from',self.cell[idx].getv(),'to "',
+                  uData[1],'"') # uData[1] is usually blank
             self.cell[uData[0]].setv(uData[1])
+            return uData[0]
         else:              
             print('undo stack empty')
+            return None
         pass
 
     

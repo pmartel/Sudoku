@@ -17,8 +17,8 @@ class SudokuSolver():
         print('guessing solver')
         while True:
             # try the deterministic solver
-            game.solve()
-            blanks = game.countEmpty()
+            self.solve()
+            blanks = self.countEmpty()
             if blanks == 0:
                 break
             # find the shortest options list.  If there's a cell with an empty list
@@ -40,7 +40,21 @@ class SudokuSolver():
                         pass
                 pass
             if bad:
-                break
+                print('Guess Stack')
+                for n in range(len(idxStack)):
+                    print(idxStack[n],guessStack[n])
+
+                # back up to last guess
+                lastGuess = idxStack[len(idxStack)-1]
+                print('lastGuess',lastGuess)
+                undoVal = -1
+                while undoVal != lastGuess:
+                    undoVal = self.game.undo()
+                    if undoVal == None:
+                        print('No solution')
+                        input('proceed?')
+                #change guess
+                break            
             #this might go into a structure or class, but for now, two lists
             guessStack.append(opt)
             idxStack.append(shortest)
