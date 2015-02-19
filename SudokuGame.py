@@ -260,7 +260,7 @@ class SudokuGame(Frame):
         self.can.update()
         active = self.focusIdx
         print('active <{0}>'.format(active))
-        l = self.findOptions(active,0)
+        l = self.solver.findOptions(active,0)
         print('Options for cell {0}: {1}'.format(active,l))
               
     def restart(self):

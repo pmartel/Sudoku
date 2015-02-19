@@ -52,7 +52,7 @@ class SudokuSolver():
                     undoVal = self.game.undo()
                     if undoVal == None:
                         print('No solution')
-                        input('proceed?')
+                        return
                 #change guess
                 break            
             #this might go into a structure or class, but for now, two lists
@@ -61,8 +61,8 @@ class SudokuSolver():
             # now take the last element in idxStack as a cell,
             # and the first element of the last element of guessStack and
             # put it into the cell
-            print( 'guessing cell',n,'is',opt[0])
-            cells[shortest].setv(opt[0])
+            print( '===>guessing cell',shortest,'is',opt[0])
+            cells[shortest].setvStack(opt[0])
     
 
     # non-guess solver code
