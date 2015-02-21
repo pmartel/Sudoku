@@ -6,13 +6,14 @@ import time
 
 class SudokuSolver():
     guessStack = []
+    idxStack=[]
     def __init__(self,game):
         self.game=game
 
     def guessingSolve(self):
         game = self.game
-        guessStack=[]
-        idxStack=[]
+        self.guessStack=[]
+        self.idxStack=[]
         bad = False
         print('guessing solver')
         while True:
@@ -40,12 +41,14 @@ class SudokuSolver():
                         pass
                 pass
             if bad:
+                input('hit enter')
                 print('Guess Stack')
-                for n in range(len(idxStack)):
-                    print(idxStack[n],guessStack[n])
+                for n in range(len(self.idxStack)):
+                    print(self.idxStack[n],self.guessStack[n])
 
                 # back up to last guess
-                lastGuess = idxStack[len(idxStack)-1]
+                stackLen = len(self.idxStack)-1
+                lastGuess = self.idxStack[stackLen]
                 print('lastGuess',lastGuess)
                 undoVal = -1
                 while undoVal != lastGuess:
@@ -54,10 +57,26 @@ class SudokuSolver():
                         print('No solution')
                         return
                 #change guess
-                break            
-            #this might go into a structure or class, but for now, two lists
-            guessStack.append(opt)
-            idxStack.append(shortest)
+                if len(self.guessStack[stackLen]) > 1:
+                    #more guesses possible at last guess cell
+                    self.guessStack[stackLen].pop(0)
+                    print('next guess for cell',self.idxStack[stackLen],
+                          'is',self.guessStack[0])
+                else:
+                    #Go back to previous guess cell
+                    if len(self.idxStack) == 0:
+                        print('Out of options')
+                        break
+                    else:
+                        print('giving up on cell',self.idxStack[stackLen])
+                        self.idxStack.pop()
+                        stackLen -= 1
+                opt = self.guessStack[stackLen]
+                shortest = self.idxStack[stackLen]
+            else:
+                #this might go into a structure or class, but for now, two lists
+                self.guessStack.append(opt)
+                self.idxStack.append(shortest)
             # now take the last element in idxStack as a cell,
             # and the first element of the last element of guessStack and
             # put it into the cell
