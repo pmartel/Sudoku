@@ -3,12 +3,14 @@ makes it easier to keep things like guess stacks arount """
 import collections # for named tuples
 
 import time
+from Guesser import Guesser
 
 class SudokuSolver():
     guessStack = []
     idxStack=[]
     def __init__(self,game):
         self.game=game
+        self.guesser = Guesser(self)
 
     def guessingSolve(self):
         game = self.game
