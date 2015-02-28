@@ -22,9 +22,9 @@ class SudokuSolver():
             blanks = self.countEmpty()
             if blanks == 0:
                 break
-            # find the shortest options list.  If there's a cell with an empty list
-            # the game is bad, retry.  A singleton list doesn't count; that's just
-            # a filled cell
+            # Find the shortest options list.  If there's a cell with an empty
+            # list the guess was bad, back up and retry.
+            # A singleton list doesn't count; that's just a filled cell.
             opt = game.digList
             cells = game.cell
             for n in range(game.numCells):
@@ -41,27 +41,24 @@ class SudokuSolver():
                         pass
                 pass
             if bad:
-                input('hit enter')
-                print('Guess Stack')
-                for n in range(len(self.idxStack)):
-                    print(self.idxStack[n],self.guessStack[n])
+                #input('hit enter')
 
                 # back up to last guess
                 stackLen = len(self.idxStack)-1
-                lastGuess = self.idxStack[stackLen]
-                print('lastGuess',lastGuess)
+                lastIdx = self.idxStack[-1]
+                print('lastGuess cell',lastIdx,'was', guess)
                 undoVal = -1
-                while undoVal != lastGuess:
+                while undoVal != lastIdx:
                     undoVal = self.game.undo()
                     if undoVal == None:
                         print('No solution')
                         return
                 #change guess
-                if len(self.guessStack[stackLen]) > 1:
+                #print('guessStack[-1]',self.guessStack[stackLen])
+                if len(self.guessStack[stackLen]) > 0:
                     #more guesses possible at last guess cell
-                    self.guessStack[stackLen].pop(0)
                     print('next guess for cell',self.idxStack[stackLen],
-                          'is',self.guessStack[0])
+                          'is',self.guessStack[stackLen][-1])
                 else:
                     #Go back to previous guess cell
                     if len(self.idxStack) == 0:
@@ -70,18 +67,27 @@ class SudokuSolver():
                     else:
                         print('giving up on cell',self.idxStack[stackLen])
                         self.idxStack.pop()
+                        self.guessStack.pop()
                         stackLen -= 1
+                        ## need to undo until we get to previous guess.
                 opt = self.guessStack[stackLen]
                 shortest = self.idxStack[stackLen]
-            else:
+            else: # not bad
                 #this might go into a structure or class, but for now, two lists
                 self.guessStack.append(opt)
                 self.idxStack.append(shortest)
+            #print info about the guess stack
+            print('Guess Stack')
+            print('Cell','Options')
+            for n in range(len(self.idxStack)):
+                print(self.idxStack[n],self.guessStack[n])
             # now take the last element in idxStack as a cell,
-            # and the first element of the last element of guessStack and
+            # and the last element of the last element of guessStack and
             # put it into the cell
-            print( '===>guessing cell',shortest,'is',opt[0])
-            cells[shortest].setvStack(opt[0])
+            cellIdx = self.idxStack[-1]
+            guess = self.guessStack[-1].pop()
+            print( '===>guessing cell',cellIdx,'is',guess)
+            cells[cellIdx].setvStack(guess)
     
 
     # non-guess solver code
