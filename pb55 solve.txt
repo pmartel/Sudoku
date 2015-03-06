@@ -1,0 +1,261 @@
+>>> 
+>>> SudokuGame.load(C:/Users/Phil/Desktop/Computer Languages/Python/Sudoku/pb55.sud)
+guessing solver
+Solving puzzle. Pass 1.  Initially 56 empty cells.
+Test 1 - cells with only one option
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+only 3 in row 3 is index 29
+only 6 in row 2 is index 20
+only 8 in row 2 is index 18
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+only 8 in box 7 is index 76
+game is ok
+Solving puzzle. Pass 2.  Initially 52 empty cells.
+Test 1 - cells with only one option
+Cell 65 can only be 4
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+only 4 in col 7 is index 79
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+only 3 in box 8 is index 70
+game is ok
+Solving puzzle. Pass 3.  Initially 49 empty cells.
+Test 1 - cells with only one option
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+game is ok
+Sudoku solver stuck
+Guess Stack
+Cell Options
+9 ['1', '4']
+===>guessing cell 9 is 4
+Solving puzzle. Pass 1.  Initially 48 empty cells.
+Test 1 - cells with only one option
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+only 4 in col 1 is index 37
+only 8 in col 1 is index 46
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+only 7 in box 3 is index 47
+game is ok
+Solving puzzle. Pass 2.  Initially 45 empty cells.
+Test 1 - cells with only one option
+Cell 11 can only be 5
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+only 2 in col 2 is index 74
+only 4 in col 3 is index 57
+only 9 in col 2 is index 2
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+game is ok
+Solving puzzle. Pass 3.  Initially 41 empty cells.
+Test 1 - cells with only one option
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+game is ok
+Sudoku solver stuck
+Guess Stack
+Cell Options
+9 ['1']
+0 ['1', '3']
+===>guessing cell 0 is 3
+Solving puzzle. Pass 1.  Initially 40 empty cells.
+Test 1 - cells with only one option
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+only 1 in col 0 is index 72
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+game is ok
+Solving puzzle. Pass 2.  Initially 39 empty cells.
+Test 1 - cells with only one option
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+game is ok
+Sudoku solver stuck
+Guess Stack
+Cell Options
+9 ['1']
+0 ['1']
+1 ['1', '7']
+===>guessing cell 1 is 7
+Solving puzzle. Pass 1.  Initially 38 empty cells.
+Test 1 - cells with only one option
+Cell 10 can only be 1
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+game is ok
+Solving puzzle. Pass 2.  Initially 37 empty cells.
+Test 1 - cells with only one option
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+game is ok
+Sudoku solver stuck
+Guess Stack
+Cell Options
+9 ['1']
+0 ['1']
+1 ['1']
+7 ['1', '2']
+===>guessing cell 7 is 2
+Solving puzzle. Pass 1.  Initially 36 empty cells.
+Test 1 - cells with only one option
+Cell 15 can only be 7
+Cell 25 can only be 1
+Cell 43 can only be 9
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+only 2 in row 1 is index 14
+only 9 in row 3 is index 31
+game is ok
+Test 3 - by digits check for only one cell in a col can be it
+only 4 in col 4 is index 4
+only 5 in col 4 is index 22
+only 7 in col 7 is index 34
+only 9 in col 0 is index 45
+game is ok
+Test 3 - by digits check for only one cell in a box can be it
+only 1 in box 1 is index 5
+only 2 in box 3 is index 36
+only 2 in box 5 is index 51
+only 2 in box 8 is index 62
+only 3 in box 1 is index 21
+only 3 in box 7 is index 58
+only 4 in box 4 is index 32
+only 6 in box 5 is index 44
+only 7 in box 1 is index 23
+only 7 in box 7 is index 75
+only 8 in box 4 is index 41
+game is ok
+Solving puzzle. Pass 2.  Initially 16 empty cells.
+Test 1 - cells with only one option
+Cell 8 can only be 5
+Cell 39 can only be 5
+Cell 49 can only be 1
+Cell 55 can only be 9
+Cell 60 can only be 1
+Cell 66 can only be 1
+Cell 71 can only be 8
+Cell 73 can only be 3
+game is ok
+Test 2 - by digits check for only one cell in a row can be it
+only 1 in row 3 is index 35
+only 5 in row 7 is index 69
+only 5 in row 8 is index 78
+only 6 in row 0 is index 6
+only 6 in row 5 is index 48
+only 8 in row 3 is index 33
+Duplicate digits in
+idx	row	col	box	val
+69	7	6	8	5
+78	8	6	8	5
+Sudoku solver stuck
+no options for cell 59
+lastGuess cell 7 was 1
+undo cell 33 from 8 to "   "
+undo cell 48 from 6 to "   "
+undo cell 6 from 6 to "   "
+undo cell 78 from 5 to "   "
+undo cell 69 from 5 to "   "
+undo cell 35 from 1 to "   "
+undo cell 73 from 3 to "   "
+undo cell 71 from 8 to "   "
+undo cell 66 from 1 to "   "
+undo cell 60 from 1 to "   "
+undo cell 55 from 9 to "   "
+undo cell 49 from 1 to "   "
+undo cell 39 from 5 to "   "
+undo cell 8 from 5 to "   "
+undo cell 41 from 8 to "   "
+undo cell 75 from 7 to "   "
+undo cell 23 from 7 to "   "
+undo cell 44 from 6 to "   "
+undo cell 32 from 4 to "   "
+undo cell 58 from 3 to "   "
+undo cell 21 from 3 to "   "
+undo cell 62 from 2 to "   "
+undo cell 51 from 2 to "   "
+undo cell 36 from 2 to "   "
+undo cell 5 from 1 to "   "
+undo cell 45 from 9 to "   "
+undo cell 34 from 7 to "   "
+undo cell 22 from 5 to "   "
+undo cell 4 from 4 to "   "
+undo cell 31 from 9 to "   "
+undo cell 14 from 2 to "   "
+undo cell 43 from 9 to "   "
+undo cell 25 from 1 to "   "
+undo cell 15 from 7 to "   "
+undo cell 7 from 2 to "   "
+giving up on cell 7
+Guess Stack
+Cell Options
+9 ['1']
+0 ['1']
+1 ['1']
+===>guessing cell 1 is 1
+Solving puzzle. Pass 1.  Initially 37 empty cells.
+Test 1 - cells with only one option
+Duplicate digits in
+idx	row	col	box	val
+1	0	1	0	1
+10	1	1	0	1
+Sudoku solver stuck
+lastGuess cell 1 was 1
+undo cell 1 from 1 to " 7 "
+giving up on cell 1
+Guess Stack
+Cell Options
+9 ['1']
+0 ['1']
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Python34\lib\idlelib\run.py", line 121, in main
+    seq, request = rpc.request_queue.get(block=True, timeout=0.05)
+  File "C:\Python34\lib\queue.py", line 175, in get
+    raise Empty
+queue.Empty
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python34\lib\tkinter\__init__.py", line 1482, in __call__
+    return self.func(*args)
+  File "C:\Users\Phil\Desktop\Computer Languages\Python\Sudoku\Solver.py", line 87, in guessingSolve
+    guess = self.guessStack[-1].pop()
+IndexError: pop from empty list
